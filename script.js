@@ -1,51 +1,37 @@
 /**
- * SmartTools Hub v5.0 Engine (FIXED FINAL)
+ * SmartTools Hub v5.1 (STABLE + UI FIXED + MORE TOOLS)
  */
 
 const TOOLS = [
-    { id: 'image-compressor', nameKey: 'compress', icon: 'minimize', category: 'Image', desc: 'Securely reduce image file size in your browser.' },
-    { id: 'background-remover', nameKey: 'bgremove', icon: 'trash-2', category: 'Image', desc: 'Separate foreground objects with AI logic.' },
-    { id: 'image-resizer', nameKey: 'resize', icon: 'image', category: 'Image', desc: 'Change dimensions of any image instantly.' },
-    { id: 'jpg-to-png', nameKey: 'png', icon: 'image', category: 'Image', desc: 'Lossless conversion to transparent PNG.' },
-    { id: 'pdf-merger', nameKey: 'pdfmerge', icon: 'file-text', category: 'PDF', desc: 'Combine multiple PDF files securely.' },
-    { id: 'pdf-splitter', nameKey: 'pdfsplit', icon: 'scissors', category: 'PDF', desc: 'Extract individual pages from your PDF.' },
-    { id: 'word-counter', nameKey: 'wordcount', icon: 'type', category: 'Text', desc: 'Read time, words, and character analysis.' },
-    { id: 'case-converter', nameKey: 'case', icon: 'type', category: 'Text', desc: 'Title case, uppercase, and lowercase switch.' },
-    { id: 'text-to-speech', nameKey: 'tts', icon: 'volume-2', category: 'Text', desc: 'Dynamic browser-based speech synthesis.' },
-    { id: 'speech-to-text', nameKey: 'stt', icon: 'mic', category: 'Text', desc: 'Real-time transcription.' },
-    { id: 'notes-app', nameKey: 'notes', icon: 'pen-tool', category: 'Text', desc: 'Persistent notepad.' },
-    { id: 'password-generator', nameKey: 'pass', icon: 'lock', category: 'Utility', desc: 'Strong passwords.' },
-    { id: 'age-calculator', nameKey: 'age', icon: 'calendar', category: 'Utility', desc: 'Calculate age.' },
-    { id: 'qr-code-generator', nameKey: 'qr', icon: 'qr-code', category: 'Utility', desc: 'Generate QR.' },
-    { id: 'color-picker', nameKey: 'color', icon: 'palette', category: 'Utility', desc: 'Pick colors.' },
-    { id: 'base64-converter', nameKey: 'b64', icon: 'hash', category: 'Utility', desc: 'Encode/Decode Base64.' },
-    { id: 'url-converter', nameKey: 'url', icon: 'link', category: 'Utility', desc: 'Encode URLs.' },
-    { id: 'unit-converter', nameKey: 'unit', icon: 'ruler', category: 'Utility', desc: 'Convert units.' },
-    { id: 'stopwatch', nameKey: 'stopwatch', icon: 'timer', category: 'Utility', desc: 'Stopwatch.' },
-    { id: 'todo-list', nameKey: 'todo', icon: 'check-square', category: 'Utility', desc: 'Todo list.' },
-    { id: 'emi-calculator', nameKey: 'emi', icon: 'landmark', category: 'Finance', desc: 'Loan EMI.' },
-    { id: 'sip-calculator', nameKey: 'sip', icon: 'banknote', category: 'Finance', desc: 'SIP returns.' },
-    { id: 'roi-calculator', nameKey: 'roi', icon: 'trending-up', category: 'Finance', desc: 'ROI calc.' },
-    { id: 'username-generator', nameKey: 'username', icon: 'at-sign', category: 'Instagram', desc: 'Username generator.' }
+    { id:'age-calculator', nameKey:'Age', icon:'calendar', category:'Utility', desc:'Calculate age' },
+    { id:'qr-code-generator', nameKey:'QR', icon:'qr-code', category:'Utility', desc:'Generate QR' },
+    { id:'password-generator', nameKey:'Password', icon:'lock', category:'Utility', desc:'Generate password' },
+    { id:'word-counter', nameKey:'Words', icon:'type', category:'Text', desc:'Word counter' },
+    { id:'todo-list', nameKey:'Todo', icon:'check-square', category:'Utility', desc:'Todo list' },
+    { id:'notes-app', nameKey:'Notes', icon:'pen-tool', category:'Text', desc:'Notes app' },
+    { id:'color-picker', nameKey:'Color', icon:'palette', category:'Utility', desc:'Pick color' },
+    { id:'unit-converter', nameKey:'Unit', icon:'ruler', category:'Utility', desc:'Convert units' },
+    { id:'roi-calculator', nameKey:'ROI', icon:'trending-up', category:'Finance', desc:'ROI calc' },
+    { id:'sip-calculator', nameKey:'SIP', icon:'banknote', category:'Finance', desc:'SIP calc' },
+    { id:'base64-converter', nameKey:'Base64', icon:'hash', category:'Utility', desc:'Encode Decode' },
+    { id:'url-converter', nameKey:'URL', icon:'link', category:'Utility', desc:'URL encode' },
+    { id:'stopwatch', nameKey:'Stopwatch', icon:'timer', category:'Utility', desc:'Timer' }
 ];
 
-const CURRENCIES = { USD:{symbol:'$'}, INR:{symbol:'₹'} };
-
 let state = {
-    theme:'light',
-    currency:'USD',
     todo: JSON.parse(localStorage.getItem('todo')||'[]'),
     notes: localStorage.getItem('notes')||''
 };
 
-// ================= RENDER =================
-
+// ================= UI CARD =================
 function createToolCard(t){
     return `
-    <div onclick="openModal('${t.id}')" class="card">
-        <i data-lucide="${t.icon}"></i>
-        <h3>${t.nameKey}</h3>
-        <p>${t.desc}</p>
+    <div onclick="openModal('${t.id}')"
+    class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow hover:shadow-xl cursor-pointer transition">
+
+        <i data-lucide="${t.icon}" class="mb-3"></i>
+        <h3 class="font-bold">${t.nameKey}</h3>
+        <p class="text-sm text-gray-500">${t.desc}</p>
     </div>`;
 }
 
@@ -56,88 +42,181 @@ function render(){
 }
 
 // ================= MODAL =================
-
 function openModal(id){
     injectToolUI(id);
     document.getElementById('modal').style.display='block';
 }
 
+// ================= TOOL UI =================
 function injectToolUI(id){
     const c = document.getElementById('tool-content');
 
     switch(id){
 
-        case 'age-calculator':
-            c.innerHTML=`<input type="date" id="age-date"><button onclick="calcAge()">Calc</button><div id="age-result"></div>`;
-        break;
+// AGE
+case 'age-calculator':
+c.innerHTML=`
+<div class="space-y-4">
+<input type="date" id="age-date" class="input">
+<button onclick="calcAge()" class="btn">Calculate</button>
+<div id="age-result"></div>
+</div>`; break;
 
-        case 'qr-code-generator':
-            c.innerHTML=`<input id="qr-text"><button onclick="genQR()">Gen</button><img id="qr-img"/>`;
-        break;
+// QR
+case 'qr-code-generator':
+c.innerHTML=`
+<div class="space-y-4">
+<input id="qr-text" placeholder="Enter text" class="input">
+<button onclick="genQR()" class="btn">Generate</button>
+<img id="qr-img" class="mx-auto"/>
+</div>`; break;
 
-        case 'password-generator':
-            c.innerHTML=`<button onclick="runPG()">Generate</button><div id="pg-out"></div>`;
-            runPG();
-        break;
+// PASSWORD
+case 'password-generator':
+c.innerHTML=`
+<div class="space-y-4 text-center">
+<button onclick="runPG()" class="btn">Generate</button>
+<div id="pg-out" class="font-mono text-xl"></div>
+</div>`;
+runPG();
+break;
 
-        case 'word-counter':
-            c.innerHTML=`<textarea id="wc" oninput="runWC()"></textarea><div id="wc-w"></div>`;
-        break;
+// WORD
+case 'word-counter':
+c.innerHTML=`
+<div class="space-y-4">
+<textarea id="wc" oninput="runWC()" class="input h-32"></textarea>
+<div id="wc-w"></div>
+</div>`; break;
 
-        case 'todo-list':
-            c.innerHTML=`<input id="todo-in"><button onclick="addTodo()">Add</button><ul id="todo-list"></ul>`;
-            renderTodo();
-        break;
+// TODO
+case 'todo-list':
+c.innerHTML=`
+<div class="space-y-4">
+<input id="todo-in" class="input">
+<button onclick="addTodo()" class="btn">Add</button>
+<ul id="todo-list"></ul>
+</div>`;
+renderTodo();
+break;
 
-        case 'notes-app':
-            c.innerHTML=`<textarea oninput="saveNotes()">${state.notes}</textarea>`;
-        break;
+// NOTES
+case 'notes-app':
+c.innerHTML=`
+<textarea oninput="saveNotes()" class="input h-40">${state.notes}</textarea>`;
+break;
 
-        case 'color-picker':
-            c.innerHTML=`<input type="color" onchange="pickColor()" id="color"><div id="color-val"></div>`;
-        break;
+// COLOR
+case 'color-picker':
+c.innerHTML=`
+<div class="space-y-4">
+<input type="color" id="color" onchange="pickColor()">
+<div id="color-val"></div>
+</div>`; break;
 
-        case 'unit-converter':
-            c.innerHTML=`<input id="unit"><button onclick="convertUnit()">Convert</button><div id="unit-out"></div>`;
-        break;
+// UNIT
+case 'unit-converter':
+c.innerHTML=`
+<div class="space-y-4">
+<input id="unit" class="input">
+<button onclick="convertUnit()" class="btn">Convert</button>
+<div id="unit-out"></div>
+</div>`; break;
 
-        case 'roi-calculator':
-            c.innerHTML=`<input id="roi-i"><input id="roi-r"><button onclick="calcROI()">Calc</button><div id="roi-out"></div>`;
-        break;
+// ROI
+case 'roi-calculator':
+c.innerHTML=`
+<div class="space-y-4">
+<input id="roi-i" placeholder="Invest" class="input">
+<input id="roi-r" placeholder="Return" class="input">
+<button onclick="calcROI()" class="btn">Calculate</button>
+<div id="roi-out"></div>
+</div>`; break;
 
-        default:
-            c.innerHTML=`<h2>Tool Coming Soon</h2>`;
-    }
+// SIP
+case 'sip-calculator':
+c.innerHTML=`
+<div class="space-y-4">
+<input id="sip-m" placeholder="Monthly" class="input">
+<input id="sip-r" placeholder="Rate" class="input">
+<input id="sip-y" placeholder="Years" class="input">
+<button onclick="calcSIP()" class="btn">Calculate</button>
+<div id="sip-out"></div>
+</div>`; break;
 
-    lucide.createIcons();
+// BASE64
+case 'base64-converter':
+c.innerHTML=`
+<div class="space-y-4">
+<textarea id="b64-in" class="input"></textarea>
+<button onclick="toBase64()" class="btn">Encode</button>
+<button onclick="fromBase64()" class="btn">Decode</button>
+<textarea id="b64-out" class="input"></textarea>
+</div>`; break;
+
+// URL
+case 'url-converter':
+c.innerHTML=`
+<div class="space-y-4">
+<input id="url-in" class="input">
+<button onclick="encodeURL()" class="btn">Encode</button>
+<button onclick="decodeURL()" class="btn">Decode</button>
+<input id="url-out" class="input">
+</div>`; break;
+
+// STOPWATCH
+case 'stopwatch':
+c.innerHTML=`
+<div class="text-center space-y-4">
+<div id="sw">0</div>
+<button onclick="startSW()" class="btn">Start</button>
+<button onclick="stopSW()" class="btn">Stop</button>
+</div>`; break;
+
+default:
+c.innerHTML=`<h2>Coming Soon</h2>`;
+}
+
+lucide.createIcons();
 }
 
 // ================= LOGIC =================
 
+// AGE
 function calcAge(){
     const d=new Date(document.getElementById('age-date').value);
     document.getElementById('age-result').innerText =
     new Date().getFullYear()-d.getFullYear()+" Years";
 }
 
+// QR FIXED
 function genQR(){
-    document.getElementById('qr-img').src =
-    "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="+
-    encodeURIComponent(document.getElementById('qr-text').value);
+    const text=document.getElementById('qr-text').value.trim();
+    if(!text) return alert("Enter text");
+
+    const img=document.getElementById('qr-img');
+    img.src="";
+    setTimeout(()=>{
+        img.src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="+encodeURIComponent(text);
+    },50);
 }
 
+// PASSWORD
 function runPG(){
-    let chars="abcABC123";
+    let chars="abcABC123!@#";
     let pass="";
-    for(let i=0;i<10;i++) pass+=chars[Math.floor(Math.random()*chars.length)];
+    for(let i=0;i<12;i++)
+        pass+=chars[Math.floor(Math.random()*chars.length)];
     document.getElementById('pg-out').innerText=pass;
 }
 
+// WORD
 function runWC(){
-    let t=document.getElementById('wc').value;
-    document.getElementById('wc-w').innerText=t.split(" ").length;
+    let t=document.getElementById('wc').value.trim();
+    document.getElementById('wc-w').innerText=t? t.split(/\s+/).length:0;
 }
 
+// TODO
 function addTodo(){
     let v=document.getElementById('todo-in').value;
     state.todo.push(v);
@@ -151,27 +230,66 @@ function renderTodo(){
     ul.innerHTML=state.todo.map(t=>`<li>${t}</li>`).join('');
 }
 
+// NOTES
 function saveNotes(){
     state.notes=document.querySelector('textarea').value;
     localStorage.setItem('notes',state.notes);
 }
 
+// COLOR
 function pickColor(){
     document.getElementById('color-val').innerText =
     document.getElementById('color').value;
 }
 
+// UNIT
 function convertUnit(){
     let v=parseFloat(document.getElementById('unit').value);
     document.getElementById('unit-out').innerText=(v/100)+" meters";
 }
 
+// ROI
 function calcROI(){
     let i=+document.getElementById('roi-i').value;
     let r=+document.getElementById('roi-r').value;
     document.getElementById('roi-out').innerText=((r-i)/i*100).toFixed(2)+"%";
 }
 
-// ================= BOOT =================
+// SIP
+function calcSIP(){
+    const m=+document.getElementById('sip-m').value;
+    const r=+document.getElementById('sip-r').value/100/12;
+    const n=+document.getElementById('sip-y').value*12;
 
+    const future=m*((Math.pow(1+r,n)-1)/r)*(1+r);
+    document.getElementById('sip-out').innerText=future.toFixed(0);
+}
+
+// BASE64
+function toBase64(){
+    document.getElementById('b64-out').value=btoa(document.getElementById('b64-in').value);
+}
+function fromBase64(){
+    document.getElementById('b64-out').value=atob(document.getElementById('b64-in').value);
+}
+
+// URL
+function encodeURL(){
+    document.getElementById('url-out').value=encodeURIComponent(document.getElementById('url-in').value);
+}
+function decodeURL(){
+    document.getElementById('url-out').value=decodeURIComponent(document.getElementById('url-in').value);
+}
+
+// STOPWATCH
+let swInt, swTime=0;
+function startSW(){
+    swInt=setInterval(()=>{
+        swTime++;
+        document.getElementById('sw').innerText=swTime;
+    },1000);
+}
+function stopSW(){ clearInterval(swInt); }
+
+// ================= BOOT =================
 render();
