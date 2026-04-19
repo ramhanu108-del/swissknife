@@ -380,6 +380,35 @@ function injectToolUI(id) {
             <button onclick="calcROI()" class="btn">Calculate</button>
             <div id="roi-out"></div>`;
         break;
+
+
+
+
+
+default:
+    c.innerHTML = `
+    <div class="p-20 text-center opacity-40">
+        <i data-lucide="wrench" class="w-20 h-20 mx-auto mb-6"></i>
+        <p class="font-black text-xl uppercase tracking-widest">
+            ${TRANSLATIONS[state.lang].tools[TOOLS.find(t=>t.id===id)?.nameKey] || "Tool"} Coming Soon
+        </p>
+    </div>`;
+break;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
     }
 }
 
