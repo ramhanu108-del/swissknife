@@ -24,9 +24,7 @@ let state = {
 
 // ================= INIT =================
 
-document.addEventListener("DOMContentLoaded", () => {
-    init();
-});
+document.addEventListener("DOMContentLoaded", init);
 
 function init() {
     applyTheme();
@@ -39,11 +37,7 @@ function init() {
 // ================= THEME =================
 
 function applyTheme() {
-    if (state.theme === 'dark') {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark');
-    }
+    document.documentElement.classList.toggle('dark', state.theme === 'dark');
 }
 
 // ================= EVENTS =================
@@ -55,12 +49,12 @@ function setupEvents() {
         applyTheme();
     };
 
-    document.getElementById('currency-select').onchange = (e) => {
+    document.getElementById('currency-select').onchange = e => {
         state.currency = e.target.value;
         localStorage.setItem('currency', state.currency);
     };
 
-    document.getElementById('lang-select').onchange = (e) => {
+    document.getElementById('lang-select').onchange = e => {
         state.lang = e.target.value;
         localStorage.setItem('lang', state.lang);
     };
@@ -87,10 +81,18 @@ function renderTools() {
 // ================= MODAL =================
 
 function openModal(id) {
+    const tool = TOOLS.find(t => t.id === id);
+
+    document.getElementById('modal-title').innerText = tool.name;
+    document.getElementById('modalIcon').innerHTML =
+        `<i data-lucide="${tool.icon}" class="w-6 h-6"></i>`;
+
     injectToolUI(id);
 
     document.getElementById('modal-overlay').classList.remove('hidden');
     document.getElementById('modal-container').classList.remove('hidden');
+
+    lucide.createIcons();
 }
 
 function closeModal() {
@@ -173,26 +175,36 @@ function injectToolUI(id) {
 
 // ================= LOGIC =================
 
+// QR
 function genQR() {
-    const text = document.getElementById('qr-text').value;
-    document.getElementById('qr-img').src =
-        "https://quickchart.io/qr?text=" + encodeURIComponent(text);
+    const text = document.getElementById('qr-text').value.trim();
+    const img = document.getElementById('qr-img');
+
+    if (!text) return alert("Enter text");
+
+    img.src = "";
+    img.src = "https://quickchart.io/qr?size=200&text=" + encodeURIComponent(text);
 }
 
+// EMI
 function calcEMI() {
     let p = +document.getElementById('p').value;
     let r = +document.getElementById('r').value / 12 / 100;
     let n = +document.getElementById('n').value * 12;
 
+    if (!p || !r || !n) return alert("Fill all fields");
+
     let emi = p * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
     document.getElementById('emi-out').innerText = emi.toFixed(0);
 }
 
+// WC
 function runWC() {
-    let t = document.getElementById('wc').value;
-    document.getElementById('wc-w').innerText = t.split(/\s+/).length;
+    let t = document.getElementById('wc').value.trim();
+    document.getElementById('wc-w').innerText = t ? t.split(/\s+/).length : 0;
 }
 
+// PASS
 function genPass() {
     let chars = "abcABC123@#";
     let p = "";
@@ -202,13 +214,18 @@ function genPass() {
     document.getElementById('pass-out').innerText = p;
 }
 
+// NOTES
 function saveNotes() {
     let v = document.getElementById('notes').value;
+    state.notes = v;
     localStorage.setItem('notes', v);
 }
 
+// TODO
 function addTodo() {
     let v = document.getElementById('todo-in').value;
+    if (!v) return;
+
     state.todo.push(v);
     localStorage.setItem('todo', JSON.stringify(state.todo));
     renderTodo();
@@ -219,13 +236,17 @@ function renderTodo() {
     ul.innerHTML = state.todo.map(t => `<li>${t}</li>`).join('');
 }
 
+// COLOR
 function pickColor() {
     document.getElementById('color-val').innerText =
         document.getElementById('color').value;
 }
 
+// UNIT
 function convert() {
     let v = parseFloat(document.getElementById('unit').value);
+    if (!v) return;
+
     document.getElementById('unit-out').innerText = (v / 100) + " m";
 }
 
