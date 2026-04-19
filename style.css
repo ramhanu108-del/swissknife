@@ -1,49 +1,126 @@
-/* Core Styling Philosophy */
+/* Custom Styles for SmartTools Hub */
+
 :root {
-    --glass: rgba(255, 255, 255, 0.72);
-    --glass-dark: rgba(17, 24, 39, 0.75);
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-bg-dark: rgba(17, 24, 39, 0.75);
+}
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.dark .glass {
+  background: var(--glass-bg-dark);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  border: 4px solid transparent;
+  background-clip: padding-box;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #1f2937;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #d1d5db;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #374151;
+}
+
+/* Base Overrides */
+*, ::after, ::before {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
-    -webkit-font-smoothing: antialiased;
-    letter-spacing: -0.0125em;
-    scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.glass { @apply bg-white/75 dark:bg-gray-900/75 backdrop-blur-2xl; }
-
-/* Premium Scrollbars */
-.custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { @apply bg-gray-200 dark:bg-gray-800 rounded-full border-4 border-transparent bg-clip-padding; }
-
-/* Premium Card Interactions */
-.tool-card {
-    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.tool-card:hover {
-    @apply -translate-y-5 border-blue-600 shadow-2xl;
-    box-shadow: 0 40px 80px -20px rgba(37, 99, 235, 0.28);
+@keyframes slideInUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-.dark .tool-card:hover {
-    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.82);
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
 }
 
-/* Tool State Styles */
-.tool-label { @apply block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4 px-1; }
-.tool-field { @apply w-full p-5 rounded-3xl bg-gray-50/50 dark:bg-gray-950/40 border-2 border-transparent focus:border-blue-600 outline-none transition-all font-bold text-lg dark:text-white; }
-.action-btn { @apply w-full p-5 rounded-3xl bg-blue-600 hover:bg-blue-700 text-white font-black text-lg uppercase tracking-wider shadow-2xl shadow-blue-500/30 active:scale-[0.97] transition-all; }
-.result-pane { @apply mt-10 p-10 bg-blue-50/50 dark:bg-blue-900/10 border-2 border-blue-100 dark:border-blue-900/20 rounded-[3rem] animate-in fade-in slide-in-from-bottom-5 duration-700; }
+.animate-slide-up {
+  animation: slideInUp 0.3s ease-out;
+}
 
-/* Form Elements Reset */
-input[type="range"] { accent-color: #2563eb; }
+/* Range input styling */
+input[type=range] {
+  -webkit-appearance: none;
+  background-color: #e5e7eb;
+  height: 0.5rem;
+  border-radius: 9999px;
+}
 
-/* Shelf Headers */
-#shelves h3 { letter-spacing: -0.025em; }
+.dark input[type=range] {
+  background-color: #374151;
+}
 
-@media (max-width: 640px) {
-    #hero Headline { font-size: 2.8rem !important; }
-    .tool-card { padding: 1.75rem !important; }
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: #2563eb;
+  border-radius: 9999px;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Tool Result Styling */
+.tool-result {
+  padding: 1.5rem;
+  background-color: #eff6ff;
+  border: 2px solid #dbeafe;
+  border-radius: 1.5rem;
+}
+
+.dark .tool-result {
+  background-color: rgba(30, 58, 138, 0.2);
+  border-color: rgba(30, 58, 138, 0.3);
+}
+
+/* Modal specific tweaks */
+#modal-container.scale-95 {
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(0.95);
+}
+
+#modal-container.scale-100 {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
 }
