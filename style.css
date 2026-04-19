@@ -1,61 +1,54 @@
-/* Custom Fonts */
-body {
-    font-family: 'Inter', sans-serif;
-}
-
-/* Animations */
-.tool-card {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.tool-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
-    border-color: #2563eb;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
+/* Custom Scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
     width: 6px;
 }
-::-webkit-scrollbar-track {
+.custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
 }
-::-webkit-scrollbar-thumb {
+.custom-scrollbar::-webkit-scrollbar-thumb {
     background: #e2e8f0;
     border-radius: 10px;
 }
-.dark ::-webkit-scrollbar-thumb {
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
     background: #1e293b;
 }
 
-/* Tool View Specifics */
-#toolInterface input, #toolInterface textarea {
-    @apply border-2 border-gray-100 dark:border-gray-800 focus:border-blue-500 outline-none transition-all;
+/* Base Styles */
+body {
+    -webkit-font-smoothing: antialiased;
 }
 
-button:active {
-    transform: scale(0.95);
+/* Tool Cards */
+.tool-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.tool-card:hover {
+    transform: translateY(-8px);
+    border-color: #2563eb;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
 
+/* Modal Animations */
+#toolModal.active {
+    display: flex;
+}
+#modalContainer.show {
+    transform: scale(1);
+    opacity: 1;
+}
 
+/* Inputs & Forms inside Tools */
+.tool-input {
+    @apply w-full p-4 rounded-xl bg-gray-50 dark:bg-gray-900 border-2 border-gray-100 dark:border-gray-800 focus:border-blue-500 outline-none transition-all;
+}
+.tool-btn {
+    @apply w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 active:scale-95 transition-all shadow-lg;
+}
+.tool-label {
+    @apply block text-sm font-bold text-gray-400 uppercase tracking-widest mb-2;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+/* Result Area */
+.result-box {
+    @apply mt-6 p-6 bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 rounded-2xl;
 }
