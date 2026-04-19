@@ -36,4 +36,38 @@ body {
 
 button:active {
     transform: scale(0.95);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Optimization for browser rendering */
+body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+/* Modal specific scrolling */
+#toolView::-webkit-scrollbar { width: 4px; }
+#toolView::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 10px; }
+
+/* Grid Hover Interaction */
+#toolGrid > div:active { transform: scale(0.98); }
+
+/* Theme Transition */
+.transition-colors { transition-property: background-color, border-color, color; transition-duration: 300ms; }
+
+
+
+
+    
 }
