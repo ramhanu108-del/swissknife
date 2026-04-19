@@ -3,102 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartTools Hub - Swiss Knife for All Your Work</title>
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Free online tools for images, PDF, finance, text, and Instagram. Fast, secure, and works entirely in your browser.">
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- CSS (Tailwind CDN for styling, keep style.css for custom overrides) -->
+    <title>SmartTools Hub - All Tools Included</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Icons Library -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans dark:bg-gray-950 dark:text-gray-100 transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
 
-    <!-- Navigation -->
     <nav class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-100 dark:border-gray-800">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2 cursor-pointer" onclick="goHome()">
-                <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg">
-                    <i data-lucide="wrench"></i>
-                </div>
-                <span class="text-xl font-extrabold tracking-tight">SmartTools <span class="text-blue-600">Hub</span></span>
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white"><i data-lucide="wrench"></i></div>
+                <span class="text-xl font-extrabold">SmartTools <span class="text-blue-600">Hub</span></span>
             </div>
-            
-            <div class="flex items-center gap-4">
-                <button id="themeToggle" class="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
-                    <i data-lucide="moon" id="moonIcon"></i>
-                    <i data-lucide="sun" id="sunIcon" class="hidden"></i>
-                </button>
-            </div>
+            <button id="themeToggle" class="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
+                <i data-lucide="moon" id="moonIcon"></i>
+                <i data-lucide="sun" id="sunIcon" class="hidden"></i>
+            </button>
         </div>
     </nav>
 
-    <!-- Main View -->
-    <main id="mainContent" class="min-h-screen">
-        <!-- Hero Section (Shown on Home Only) -->
-        <section id="heroSection" class="pt-20 pb-16 px-4">
-            <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight leading-tight">
-                    Swiss Knife for <br/>
-                    <span class="text-blue-600">All Your Work</span>
-                </h1>
-                <p class="text-lg text-gray-500 mb-10 max-w-2xl mx-auto">
-                    33+ powerful, secure, and browser-based tools. No data leaves your device.
-                </p>
-                
-                <!-- Search -->
-                <div class="relative max-w-2xl mx-auto mb-12">
-                    <input type="text" id="toolSearch" placeholder="Search for tools... (e.g. image compressor)" 
-                           class="w-full pl-14 pr-6 py-5 rounded-2xl bg-white dark:bg-gray-900 border-2 border-gray-100 dark:border-gray-800 focus:border-blue-500 outline-none shadow-xl transition-all text-lg">
-                    <div class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400">
-                        <i data-lucide="search"></i>
-                    </div>
-                </div>
-
-                <!-- Categories -->
-                <div id="categoryTabs" class="flex flex-wrap items-center justify-center gap-2 mb-12">
-                    <!-- Categories will be injected here -->
-                </div>
+    <main id="app">
+        <section id="hero" class="pt-20 pb-12 px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4">Complete <span class="text-blue-600">Smart Utility</span> Suite</h1>
+            <p class="text-gray-500 mb-8">Access all 33+ browser-based tools for free, anywhere.</p>
+            
+            <div class="relative max-w-xl mx-auto mb-10">
+                <input type="text" id="toolSearch" placeholder="Search 33+ tools..." class="w-full pl-12 pr-6 py-4 rounded-xl bg-white dark:bg-gray-900 border-2 border-gray-100 dark:border-gray-800 outline-none focus:border-blue-500 shadow-lg">
+                <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i data-lucide="search"></i></div>
             </div>
+
+            <div id="categoryTabs" class="flex flex-wrap justify-center gap-2"></div>
         </section>
 
-        <!-- Tool Grid -->
-        <div id="toolGridPage" class="max-w-7xl mx-auto px-4 pb-20">
-            <div id="toolGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Tools will be injected here -->
-            </div>
-            <div id="emptySearch" class="hidden text-center py-20">
-                <p class="text-gray-400">No tools found matching your search.</p>
-            </div>
-        </div>
+        <section class="max-w-7xl mx-auto px-4 pb-20">
+            <div id="toolGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+            <div id="emptySearch" class="hidden py-20 text-center text-gray-400">No tools found matching your search.</div>
+        </section>
 
-        <!-- Individual Tool Content (Hidden by default) -->
-        <div id="toolView" class="hidden max-w-4xl mx-auto px-4 pt-10 pb-20">
-            <button onclick="goHome()" class="flex items-center gap-2 text-blue-600 font-bold mb-8 hover:translate-x-[-4px] transition-transform">
-                <i data-lucide="arrow-left"></i> Back to Home
-            </button>
-            <div id="toolInterface" class="bg-white dark:bg-gray-900 rounded-3xl p-8 border border-gray-100 dark:border-gray-800 shadow-xl">
-                <!-- Active Tool HTML will be injected here -->
+        <section id="toolView" class="hidden fixed inset-0 z-[60] bg-white dark:bg-gray-950 overflow-y-auto p-4 md:p-10">
+            <div class="max-w-4xl mx-auto">
+                <button onclick="goHome()" class="mb-8 flex items-center gap-2 text-blue-600 font-bold hover:translate-x-[-4px] transition-transform">
+                    <i data-lucide="arrow-left"></i> Back to Tools
+                </button>
+                <div id="toolInterface" class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-2xl"></div>
             </div>
-            <div id="toolSEO" class="mt-16 space-y-10">
-                <!-- SEO Content for active tool -->
-            </div>
-        </div>
+        </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 py-16 px-4">
-        <div class="max-w-7xl mx-auto text-center">
-            <p class="text-gray-500">Made with ❤️ for everyone. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
