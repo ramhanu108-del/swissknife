@@ -203,31 +203,49 @@ function injectToolLogic(id) {
             break;
 
         case 'emi':
-            html = `
-                <div class="space-y-4">
-                    <label class="tool-label">Loan Amount (₹)</label>
-                    <input type="number" id="p" class="tool-input" value="100000">
-                    <label class="tool-label">Interest Rate (% p.a)</label>
-                    <input type="number" id="r" class="tool-input" value="8.5">
-                    <label class="tool-label">Tenure (Months)</label>
-                    <input type="number" id="n" class="tool-input" value="12">
-                    <button onclick="calcEMI()" class="tool-btn">Calculate EMI</button>
-                    <div id="res" class="result-box hidden">
-                        <div class="text-center"><span class="text-sm text-gray-400">Monthly EMI</span><h2 id="emiVal" class="text-4xl font-black text-blue-600"></h2></div>
-                    </div>
-                </div>
-            `;
-            // Simple logic attach to global for ease
-            window.calcEMI = () => {
-                const P = parseFloat(document.getElementById('p').value);
-                const r = parseFloat(document.getElementById('r').value) / (12 * 100);
-                const n = parseFloat(document.getElementById('n').value);
-                const emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-                document.getElementById('res').classList.remove('hidden');
-                document.getElementById('emiVal').innerText = '₹' + Math.round(emi).toLocaleString();
-            };
-            break;
+    html = `
+        <div class="space-y-4">
+            <input type="number" id="p" class="tool-input" placeholder="Loan Amount (₹)">
+            <input type="number" id="r" class="tool-input" placeholder="Interest Rate (%)">
+            <input type="number" id="n" class="tool-input" placeholder="Months">
 
+            <button onclick="calcEMI()" class="tool-btn">Calculate EMI</button>
+
+            <div id="res" class="result-box hidden text-center">
+                <h2 id="emiVal" class="text-3xl font-bold text-blue-600"></h2>
+            </div>
+
+            <canvas id="emiChart"></canvas>
+        </div>
+    `;
+
+    window.calcEMI = () => {
+        const P = +document.getElementById('p').value;
+        const r = +document.getElementById('r').value / 12 / 100;
+        const n = +document.getElementById('n').value;
+
+        if(!P || !r || !n) return;
+
+        const emi = (P * r * Math.pow(1+r,n)) / (Math.pow(1+r,n)-1);
+        const total = emi * n;
+
+        document.getElementById('res').classList.remove('hidden');
+        document.getElementById('emiVal').innerText =
+            "₹ " + Math.round(emi).toLocaleString();
+
+        if(window.emiChart) window.emiChart.destroy();
+
+        window.emiChart = new Chart(document.getElementById('emiChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Principal', 'Interest'],
+                datasets: [{
+                    data: [P, total - P]
+                }]
+            }
+        });
+    };
+break;
 
 
 
