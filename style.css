@@ -1,0 +1,39 @@
+/* Custom Fonts */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Animations */
+.tool-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tool-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
+    border-color: #2563eb;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+}
+.dark ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+}
+
+/* Tool View Specifics */
+#toolInterface input, #toolInterface textarea {
+    @apply border-2 border-gray-100 dark:border-gray-800 focus:border-blue-500 outline-none transition-all;
+}
+
+button:active {
+    transform: scale(0.95);
+}
