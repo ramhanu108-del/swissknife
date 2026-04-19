@@ -180,303 +180,152 @@ function injectToolLogic(id) {
     const body = document.getElementById('modalBody');
     let html = '';
 
-    // Logic Map
     switch(id) {
+
+        // WORD COUNTER
         case 'word-c':
             html = `
-                <div class="space-y-4">
-                    <label class="tool-label">Paste Content</label>
-                    <textarea id="ti" class="tool-input h-48" placeholder="Start typing..."></textarea>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl text-center"><div class="text-3xl font-bold" id="tw">0</div><div class="text-xs text-gray-400 font-bold">Words</div></div>
-                        <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl text-center"><div class="text-3xl font-bold" id="tc">0</div><div class="text-xs text-gray-400 font-bold">Characters</div></div>
-                    </div>
+                <textarea id="ti" class="tool-input h-48"></textarea>
+                <div class="grid grid-cols-2 gap-4">
+                    <div id="tw">0 Words</div>
+                    <div id="tc">0 Characters</div>
                 </div>
             `;
             setTimeout(() => {
                 document.getElementById('ti').oninput = (e) => {
-                    const v = e.target.value.trim();
-                    document.getElementById('tw').innerText = v ? v.split(/\s+/).length : 0;
-                    document.getElementById('tc').innerText = v.length;
+                    let v = e.target.value;
+                    document.getElementById('tw').innerText = v.split(/\s+/).filter(Boolean).length + " Words";
+                    document.getElementById('tc').innerText = v.length + " Characters";
                 };
-            }, 100);
-            break;
+            },100);
+        break;
 
+        // EMI (WITH GRAPH)
         case 'emi':
-    html = `
-        <div class="space-y-4">
-            <input type="number" id="p" class="tool-input" placeholder="Loan Amount (₹)">
-            <input type="number" id="r" class="tool-input" placeholder="Interest Rate (%)">
-            <input type="number" id="n" class="tool-input" placeholder="Months">
+            html = `
+                <input id="p" class="tool-input" placeholder="Loan">
+                <input id="r" class="tool-input" placeholder="Rate">
+                <input id="n" class="tool-input" placeholder="Months">
+                <button onclick="calcEMI()" class="tool-btn">Calculate</button>
+                <div id="emiVal"></div>
+                <canvas id="emiChart"></canvas>
+            `;
+            window.calcEMI = () => {
+                let P=+p.value,r=+r.value/12/100,n=+n.value;
+                let emi=(P*r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);
+                emiVal.innerText="₹"+Math.round(emi);
 
-            <button onclick="calcEMI()" class="tool-btn">Calculate EMI</button>
+                if(window.chart) window.chart.destroy();
+                window.chart=new Chart(emiChart,{
+                    type:'doughnut',
+                    data:{labels:['Loan','Interest'],datasets:[{data:[P,(emi*n)-P]}]}
+                });
+            };
+        break;
 
-            <div id="res" class="result-box hidden text-center">
-                <h2 id="emiVal" class="text-3xl font-bold text-blue-600"></h2>
-            </div>
+        // SIP (WITH GRAPH)
+        case 'sip':
+            html = `
+                <input id="m" class="tool-input" placeholder="Monthly">
+                <input id="r" class="tool-input" placeholder="Rate">
+                <input id="y" class="tool-input" placeholder="Years">
+                <button onclick="calcSIP()" class="tool-btn">Calculate</button>
+                <div id="sipVal"></div>
+                <canvas id="sipChart"></canvas>
+            `;
+            window.calcSIP = () => {
+                let P=+m.value,r=+r.value/100/12,n=+y.value*12;
+                let fv=P*((Math.pow(1+r,n)-1)/r)*(1+r);
+                sipVal.innerText="₹"+Math.round(fv);
 
-            <canvas id="emiChart"></canvas>
-        </div>
-    `;
+                if(window.chart2) window.chart2.destroy();
+                window.chart2=new Chart(sipChart,{
+                    type:'doughnut',
+                    data:{labels:['Invested','Profit'],datasets:[{data:[P*n,fv-(P*n)]}]}
+                });
+            };
+        break;
 
-    window.calcEMI = () => {
-        const P = +document.getElementById('p').value;
-        const r = +document.getElementById('r').value / 12 / 100;
-        const n = +document.getElementById('n').value;
-
-        if(!P || !r || !n) return;
-
-        const emi = (P * r * Math.pow(1+r,n)) / (Math.pow(1+r,n)-1);
-        const total = emi * n;
-
-        document.getElementById('res').classList.remove('hidden');
-        document.getElementById('emiVal').innerText =
-            "₹ " + Math.round(emi).toLocaleString();
-
-        if(window.emiChart) window.emiChart.destroy();
-
-        window.emiChart = new Chart(document.getElementById('emiChart'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Principal', 'Interest'],
-                datasets: [{
-                    data: [P, total - P]
-                }]
-            }
-        });
-    };
-break;
-
-
-
-case 'sip':
-    html = `
-        <div class="space-y-4">
-            <input type="number" id="monthly" class="tool-input" placeholder="Monthly Investment (₹)">
-            <input type="number" id="rate" class="tool-input" placeholder="Interest Rate (%)">
-            <input type="number" id="years" class="tool-input" placeholder="Years">
-
-            <button onclick="calcSIP()" class="tool-btn">Calculate</button>
-
-            <div id="sipRes" class="result-box hidden text-center">
-                <h2 id="sipVal" class="text-3xl font-bold text-green-600"></h2>
-            </div>
-
-            <canvas id="sipChart" class="mt-6"></canvas>
-        </div>
-    `;
-
-    window.calcSIP = () => {
-        let P = +document.getElementById("monthly").value;
-        let r = +document.getElementById("rate").value / 100 / 12;
-        let n = +document.getElementById("years").value * 12;
-
-        if(!P || !r || !n) return;
-
-        let invested = P * n;
-        let fv = P * ((Math.pow(1+r,n)-1)/r)*(1+r);
-
-        document.getElementById("sipRes").classList.remove("hidden");
-        document.getElementById("sipVal").innerText =
-            "₹ " + Math.round(fv).toLocaleString();
-
-        // GRAPH
-        const ctx = document.getElementById('sipChart');
-
-        if(window.sipChart) window.sipChart.destroy();
-
-        window.sipChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Invested', 'Profit'],
-                datasets: [{
-                    data: [invested, fv - invested]
-                }]
-            }
-        });
-    };
-    break;
-
-
-
-
-
-
-
-
-
-
-            
-
+        // PASSWORD
         case 'pass-g':
             html = `
-                <div class="space-y-4">
-                    <label class="tool-label">Password Length: <span id="lenv">16</span></label>
-                    <input type="range" id="len" min="8" max="64" value="16" class="w-full">
-                    <div id="pw" class="p-6 bg-gray-100 dark:bg-gray-800 rounded-2xl break-all font-mono text-center text-xl font-bold border-2 border-dashed border-gray-200">Generating...</div>
-                    <button onclick="genPass()" class="tool-btn">New Password</button>
-                </div>
+                <button onclick="gen()">Generate</button>
+                <div id="pw"></div>
             `;
-            setTimeout(() => {
-                document.getElementById('len').oninput = (e) => {
-                    document.getElementById('lenv').innerText = e.target.value;
-                    genPass();
-                };
-                window.genPass = () => {
-                    const c = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
-                    const l = document.getElementById('len').value;
-                    let r = "";
-                    for(let i=0; i<l; i++) r += c.charAt(Math.floor(Math.random()*c.length));
-                    document.getElementById('pw').innerText = r;
-                };
-                genPass();
-            }, 100);
-            break;
+            window.gen=()=>{
+                let c="abcABC123!@#",r="";
+                for(let i=0;i<12;i++) r+=c[Math.random()*c.length|0];
+                pw.innerText=r;
+            };
+        break;
 
+        // AGE
         case 'age-c':
             html = `
-                <div class="space-y-4">
-                    <label class="tool-label">Date of Birth</label>
-                    <input type="date" id="dob" class="tool-input">
-                    <button onclick="calcAge()" class="tool-btn">Find Age</button>
-                    <div id="ares" class="result-box hidden text-center font-bold text-2xl"></div>
-                </div>
+                <input type="date" id="dob">
+                <button onclick="age()">Find</button>
+                <div id="out"></div>
             `;
-            window.calcAge = () => {
-                const b = new Date(document.getElementById('dob').value);
-                const diff = new Date() - b;
-                const age = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
-                document.getElementById('ares').classList.remove('hidden');
-                document.getElementById('ares').innerText = `You are ${age} years old`;
+            window.age=()=>{
+                let d=new Date(dob.value);
+                let a=Math.floor((Date.now()-d)/(1000*60*60*24*365));
+                out.innerText=a+" years";
             };
-            break;
+        break;
 
-        case 'ig-user':
+        // BASE64
+        case 'base-64':
             html = `
-                <div class="space-y-4">
-                    <label class="tool-label">Base Keyword</label>
-                    <input type="text" id="igk" class="tool-input" placeholder="e.g. wanderer">
-                    <button onclick="genIG()" class="tool-btn">Generate Ideas</button>
-                    <div id="igList" class="grid grid-cols-2 gap-2 mt-4"></div>
-                </div>
+                <textarea id="b"></textarea>
+                <button onclick="e()">Encode</button>
+                <button onclick="d()">Decode</button>
+                <div id="res"></div>
             `;
-            window.genIG = () => {
-                const k = document.getElementById('igk').value || 'user';
-                const l = document.getElementById('igList');
-                l.innerHTML = Array.from({length: 10}).map(() => {
-                    const n = k + '_' + Math.floor(Math.random()*999);
-                    return `<div class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm font-bold border border-gray-100 dark:border-gray-700">${n}</div>`;
-                }).join('');
-            };
-            break;
-            
-        case 'stopw':
-            html = `
-                <div class="text-center space-y-6">
-                    <div id="stime" class="text-6xl font-black font-mono">00:00.0</div>
-                    <div class="flex gap-2">
-                        <button onclick="st_timer()" class="tool-btn bg-green-600 hover:bg-green-700">Start</button>
-                        <button onclick="sp_timer()" class="tool-btn bg-red-600 hover:bg-red-700">Stop</button>
-                        <button onclick="re_timer()" class="tool-btn bg-gray-600 hover:bg-gray-700">Reset</button>
-                    </div>
-                </div>
-            `;
-            let s_t = 0, s_iv = null;
-            window.st_timer = () => {
-                if(s_iv) return;
-                s_iv = setInterval(() => {
-                    s_t += 0.1;
-                    document.getElementById('stime').innerText = s_t.toFixed(1);
-                }, 100);
-            };
-            window.sp_timer = () => { clearInterval(s_iv); s_iv = null; };
-            window.re_timer = () => { s_t = 0; document.getElementById('stime').innerText = "00:00.0"; sp_timer(); };
-            break;
+            window.e=()=>res.innerText=btoa(b.value);
+            window.d=()=>res.innerText=atob(b.value);
+        break;
 
+        // URL
+        case 'url-e':
+            html = `
+                <input id="u">
+                <button onclick="ue()">Encode</button>
+                <div id="ur"></div>
+            `;
+            window.ue=()=>ur.innerText=encodeURIComponent(u.value);
+        break;
+
+        // QR
+        case 'qr-g':
+            html = `
+                <input id="q">
+                <button onclick="qr()">Generate</button>
+                <canvas id="qrCanvas"></canvas>
+            `;
+            window.qr=()=>{
+                QRCode.toCanvas(qrCanvas,q.value);
+            };
+        break;
+
+        // TODO
         case 'todo':
             html = `
-                <div class="space-y-4">
-                    <div class="flex gap-2">
-                        <input id="tn" type="text" class="tool-input" placeholder="Task name...">
-                        <button onclick="atodo()" class="w-20 bg-blue-600 text-white rounded-xl font-bold">Add</button>
-                    </div>
-                    <div id="tl" class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar"></div>
-                </div>
+                <input id="t">
+                <button onclick="add()">Add</button>
+                <div id="list"></div>
             `;
-            setTimeout(() => {
-                let items = JSON.parse(localStorage.getItem('todo_list') || '[]');
-                const rt = () => {
-                    document.getElementById('tl').innerHTML = items.map((t,i) => `
-                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-xl">
-                            <span class="font-bold">${t}</span>
-                            <button onclick="dtodo(${i})" class="text-red-500"><i data-lucide="trash-2"></i></button>
-                        </div>
-                    `).join('');
-                    localStorage.setItem('todo_list', JSON.stringify(items));
-                    lucide.createIcons();
-                };
-                window.atodo = () => {
-                    const n = document.getElementById('tn').value;
-                    if(!n) return;
-                    items.push(n);
-                    document.getElementById('tn').value = '';
-                    rt();
-                };
-                window.dtodo = (idx) => { items.splice(idx,1); rt(); };
-                rt();
-            }, 100);
-            break;
-
-        case 'tts':
-            html = `
-                <div class="space-y-4">
-                    <label class="tool-label">Enter Text</label>
-                    <textarea id="ts" class="tool-input h-32" placeholder="Hello world..."></textarea>
-                    <button onclick="playTTS()" class="tool-btn">Speak</button>
-                </div>
-            `;
-            window.playTTS = () => {
-                const msg = new SpeechSynthesisUtterance();
-                msg.text = document.getElementById('ts').value;
-                window.speechSynthesis.speak(msg);
+            let items=[];
+            window.add=()=>{
+                items.push(t.value);
+                list.innerHTML=items.map(i=>"<div>"+i+"</div>").join("");
             };
-            break;
-            
-        case 'dom-val':
-            html = `
-                <div class="space-y-4">
-                    <label class="tool-label">Domain Name</label>
-                    <input id="dn" type="text" class="tool-input" placeholder="example.com">
-                    <button onclick="estDom()" class="tool-btn">Appraise</button>
-                    <div id="dr" class="result-box hidden text-center">
-                        <div class="text-gray-400 text-sm">Estimated Value</div>
-                        <h2 id="dv" class="text-4xl font-bold text-green-600"></h2>
-                    </div>
-                </div>
-            `;
-            window.estDom = () => {
-                const dom = document.getElementById('dn').value;
-                if(!dom) return;
-                const score = dom.length < 5 ? 5000 : 500;
-                document.getElementById('dr').classList.remove('hidden');
-                document.getElementById('dv').innerText = '$' + (score + Math.floor(Math.random() * 2000)).toLocaleString();
-            };
-            break;
+        break;
 
+        // DEFAULT
         default:
-            html = `
-                <div class="p-10 border-2 border-dashed border-gray-100 dark:border-gray-800 rounded-3xl text-center space-y-4">
-                    <div class="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-full flex items-center justify-center mx-auto">
-                        <i data-lucide="cog"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-xl">Tool Initialized</h3>
-                        <p class="text-gray-500">The browser engine for <b>${id}</b> is ready for custom logic injection.</p>
-                    </div>
-                </div>
-            `;
-            break;
+            html = `<div class="text-center">Tool coming soon</div>`;
     }
 
     body.innerHTML = html;
 }
+       
