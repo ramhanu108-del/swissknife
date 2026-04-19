@@ -1,113 +1,105 @@
 /**
- * SmartTools Hub v5.1 FIXED (NO UI BREAK)
+ * SmartTools Hub FINAL STABLE ENGINE
+ * (UI SAFE + WORKING TOOLS)
  */
 
-const TOOLS = [ /* SAME AS YOUR ORIGINAL — NO CHANGE */ ];
+// ================= TOOLS =================
+const TOOLS = [
+    { id: 'qr-code-generator', nameKey: 'QR Generator', icon: 'qr-code', desc: 'Generate QR codes' },
+    { id: 'notes-app', nameKey: 'Notes', icon: 'pen-tool', desc: 'Save notes' },
+    { id: 'todo-list', nameKey: 'Todo', icon: 'check-square', desc: 'Task manager' },
+    { id: 'color-picker', nameKey: 'Color Picker', icon: 'palette', desc: 'Pick colors' },
+    { id: 'unit-converter', nameKey: 'Unit Converter', icon: 'ruler', desc: 'Convert units' }
+];
 
-const CURRENCIES = {
-    USD: { symbol: '$', rate: 1 },
-    INR: { symbol: '₹', rate: 83 }
-};
-
+// ================= STATE =================
 let state = {
     theme: localStorage.getItem('theme') || 'light',
-    currency: localStorage.getItem('currency') || 'USD',
     todo: JSON.parse(localStorage.getItem('tool_todo') || '[]'),
     notes: localStorage.getItem('tool_notes') || ''
 };
 
 // ================= RENDER =================
-
 function createToolCard(t) {
     return `
-    <div onclick="openModal('${t.id}')" class="card">
-        <i data-lucide="${t.icon}"></i>
-        <h3>${t.nameKey}</h3>
-        <p>${t.desc}</p>
+    <div onclick="openModal('${t.id}')" 
+    class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow hover:scale-105 transition cursor-pointer">
+        <i data-lucide="${t.icon}" class="mb-3"></i>
+        <h3 class="font-bold">${t.nameKey}</h3>
+        <p class="text-sm opacity-70">${t.desc}</p>
     </div>`;
 }
 
 function render() {
-    document.getElementById('tool-grid').innerHTML =
-        TOOLS.map(createToolCard).join('');
+    const grid = document.getElementById('tool-grid');
+    if (!grid) return;
+
+    grid.innerHTML = TOOLS.map(createToolCard).join('');
     lucide.createIcons();
 }
 
 // ================= MODAL =================
-
 function openModal(id) {
     injectToolUI(id);
-    document.getElementById('modal').style.display = 'block';
+
+    document.getElementById('modal-overlay').classList.remove('hidden');
+    document.getElementById('modal-container').classList.remove('hidden');
+
+    lucide.createIcons();
 }
 
+function closeModal() {
+    document.getElementById('modal-overlay').classList.add('hidden');
+    document.getElementById('modal-container').classList.add('hidden');
+}
+
+// ================= TOOL UI =================
 function injectToolUI(id) {
     const c = document.getElementById('tool-content');
-    const sym = CURRENCIES[state.currency].symbol;
 
     switch (id) {
 
-        // ✅ EMI (UI SAME STYLE)
-        case 'emi-calculator':
-            c.innerHTML = `
-            <input id="emi-p" placeholder="Loan Amount">
-            <input id="emi-r" placeholder="Rate %">
-            <input id="emi-n" placeholder="Years">
-            <button onclick="runEMI()">Calculate</button>
-            <div id="emi-out"></div>`;
-            break;
-
-        // ✅ WORD COUNTER
-        case 'word-counter':
-            c.innerHTML = `
-            <textarea id="wc" oninput="runWC()"></textarea>
-            <div>Words: <span id="wc-w">0</span></div>
-            <div>Chars: <span id="wc-c">0</span></div>`;
-            break;
-
-        // ✅ PASSWORD
-        case 'password-generator':
-            c.innerHTML = `
-            <button onclick="runPG()">Generate</button>
-            <div id="pg-out"></div>`;
-            runPG();
-            break;
-
-        // ✅ QR FIXED
+        // 🔥 QR GENERATOR (FIXED)
         case 'qr-code-generator':
             c.innerHTML = `
-            <input id="qr-text" placeholder="Enter text">
-            <button onclick="genQR()">Generate</button>
-            <img id="qr-img"/>`;
+            <div class="space-y-5">
+                <input id="qr-text" class="w-full p-4 border rounded-xl" placeholder="Enter text">
+                <button onclick="genQR()" class="w-full py-3 bg-blue-600 text-white rounded-xl">Generate</button>
+                <img id="qr-img" class="mx-auto hidden mt-4"/>
+            </div>`;
             break;
 
-        // ✅ NOTES
+        // NOTES
         case 'notes-app':
             c.innerHTML = `
-            <textarea id="notes" oninput="saveNotes()">${state.notes}</textarea>`;
+            <textarea id="notes" class="w-full h-60 p-4 border rounded-xl">${state.notes}</textarea>`;
+            document.getElementById('notes').oninput = saveNotes;
             break;
 
-        // ✅ TODO
+        // TODO
         case 'todo-list':
             c.innerHTML = `
-            <input id="todo-in">
-            <button onclick="addTodo()">Add</button>
-            <ul id="todo-list"></ul>`;
+            <div class="space-y-4">
+                <input id="todo-in" class="w-full p-3 border rounded-xl">
+                <button onclick="addTodo()" class="w-full py-2 bg-blue-600 text-white rounded-xl">Add</button>
+                <ul id="todo-list" class="space-y-2"></ul>
+            </div>`;
             renderTodo();
             break;
 
-        // ✅ COLOR
+        // COLOR
         case 'color-picker':
             c.innerHTML = `
             <input type="color" id="color" onchange="pickColor()">
-            <div id="color-val"></div>`;
+            <div id="color-val" class="mt-2 font-bold"></div>`;
             break;
 
-        // ✅ UNIT
+        // UNIT
         case 'unit-converter':
             c.innerHTML = `
-            <input id="unit">
-            <button onclick="convertUnit()">Convert</button>
-            <div id="unit-out"></div>`;
+            <input id="unit" class="p-3 border rounded">
+            <button onclick="convertUnit()" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded">Convert</button>
+            <div id="unit-out" class="mt-3"></div>`;
             break;
 
         default:
@@ -119,60 +111,16 @@ function injectToolUI(id) {
 
 // ================= LOGIC =================
 
-// EMI
-function runEMI() {
-    let p = +document.getElementById('emi-p').value;
-    let r = +document.getElementById('emi-r').value / 12 / 100;
-    let n = +document.getElementById('emi-n').value * 12;
-
-    if (!p || !r || !n) return;
-
-    let emi = p * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
-    document.getElementById('emi-out').innerText = emi.toFixed(0);
-}
-
-// WORD
-function runWC() {
-    let t = document.getElementById('wc').value.trim();
-    document.getElementById('wc-w').innerText = t ? t.split(/\s+/).length : 0;
-    document.getElementById('wc-c').innerText = t.length;
-}
-
-// PASSWORD
-function runPG() {
-    let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let pass = "";
-    for (let i = 0; i < 12; i++)
-        pass += chars[Math.floor(Math.random() * chars.length)];
-
-    document.getElementById('pg-out').innerText = pass;
-}
-
-// QR FIX
+// QR
 function genQR() {
     const text = document.getElementById('qr-text').value.trim();
     const img = document.getElementById('qr-img');
 
-    if (!text) {
-        alert("Enter text first");
-        return;
-    }
+    if (!text) return alert("Enter text");
 
-    // force reload (important fix)
     img.src = "";
-
-    // better API (more stable)
     img.src = "https://quickchart.io/qr?size=200&text=" + encodeURIComponent(text);
-
-    // ensure visible
-    img.style.display = "block";
-
-    // fallback अगर load fail हो
-    img.onerror = () => {
-        img.alt = "QR failed to load";
-        console.error("QR API failed");
-    };
-
+    img.classList.remove('hidden');
 }
 
 // NOTES
@@ -195,7 +143,7 @@ function renderTodo() {
     const ul = document.getElementById('todo-list');
     if (!ul) return;
 
-    ul.innerHTML = state.todo.map(t => `<li>${t}</li>`).join('');
+    ul.innerHTML = state.todo.map(t => `<li class="bg-gray-100 p-2 rounded">${t}</li>`).join('');
 }
 
 // COLOR
@@ -212,6 +160,13 @@ function convertUnit() {
     document.getElementById('unit-out').innerText = (v / 100) + " meters";
 }
 
-// ================= BOOT =================
+// ================= EVENTS =================
+document.getElementById('modal-close').onclick = closeModal;
+document.getElementById('modal-overlay').onclick = closeModal;
 
+document.getElementById('theme-toggle').onclick = () => {
+    document.documentElement.classList.toggle('dark');
+};
+
+// ================= BOOT =================
 render();
