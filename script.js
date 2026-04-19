@@ -228,6 +228,42 @@ function injectToolLogic(id) {
             };
             break;
 
+
+case 'sip':
+    html = `
+        <div class="space-y-4">
+            <input type="number" id="monthly" class="tool-input" placeholder="Monthly Investment">
+            <input type="number" id="rate" class="tool-input" placeholder="Interest Rate (%)">
+            <input type="number" id="years" class="tool-input" placeholder="Years">
+            <button onclick="calcSIP()" class="tool-btn">Calculate</button>
+            <div id="sipRes" class="result-box hidden text-center text-xl font-bold"></div>
+        </div>
+    `;
+    window.calcSIP = () => {
+        let P = document.getElementById("monthly").value;
+        let r = document.getElementById("rate").value / 100 / 12;
+        let n = document.getElementById("years").value * 12;
+
+        let fv = P * ((Math.pow(1+r,n)-1)/r)*(1+r);
+
+        document.getElementById("sipRes").classList.remove("hidden");
+        document.getElementById("sipRes").innerText = "₹ " + Math.round(fv);
+    };
+    break;
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
         case 'pass-g':
             html = `
                 <div class="space-y-4">
