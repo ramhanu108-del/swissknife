@@ -1,15 +1,14 @@
 /**
- * SmartTools Hub FINAL STABLE ENGINE
- * (UI SAFE + WORKING TOOLS)
+ * SmartTools Hub FINAL FULL ENGINE (STABLE)
  */
 
 // ================= TOOLS =================
 const TOOLS = [
-    { id: 'qr-code-generator', nameKey: 'QR Generator', icon: 'qr-code', desc: 'Generate QR codes' },
-    { id: 'notes-app', nameKey: 'Notes', icon: 'pen-tool', desc: 'Save notes' },
-    { id: 'todo-list', nameKey: 'Todo', icon: 'check-square', desc: 'Task manager' },
-    { id: 'color-picker', nameKey: 'Color Picker', icon: 'palette', desc: 'Pick colors' },
-    { id: 'unit-converter', nameKey: 'Unit Converter', icon: 'ruler', desc: 'Convert units' }
+    { id: 'qr-code-generator', name: 'QR Generator', icon: 'qr-code', desc: 'Generate QR codes' },
+    { id: 'notes-app', name: 'Notes', icon: 'pen-tool', desc: 'Save notes locally' },
+    { id: 'todo-list', name: 'Todo List', icon: 'check-square', desc: 'Manage tasks' },
+    { id: 'color-picker', name: 'Color Picker', icon: 'palette', desc: 'Pick colors' },
+    { id: 'unit-converter', name: 'Unit Converter', icon: 'ruler', desc: 'Convert units' }
 ];
 
 // ================= STATE =================
@@ -19,18 +18,25 @@ let state = {
     notes: localStorage.getItem('tool_notes') || ''
 };
 
+// ================= INIT =================
+function initTheme() {
+    if (state.theme === 'dark') {
+        document.documentElement.classList.add('dark');
+    }
+}
+
 // ================= RENDER =================
 function createToolCard(t) {
     return `
     <div onclick="openModal('${t.id}')" 
-    class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow hover:scale-105 transition cursor-pointer">
+    class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow hover:shadow-xl hover:-translate-y-1 transition cursor-pointer">
         <i data-lucide="${t.icon}" class="mb-3"></i>
-        <h3 class="font-bold">${t.nameKey}</h3>
+        <h3 class="font-bold text-lg">${t.name}</h3>
         <p class="text-sm opacity-70">${t.desc}</p>
     </div>`;
 }
 
-function render() {
+function renderTools() {
     const grid = document.getElementById('tool-grid');
     if (!grid) return;
 
@@ -40,6 +46,12 @@ function render() {
 
 // ================= MODAL =================
 function openModal(id) {
+    const tool = TOOLS.find(t => t.id === id);
+    if (!tool) return;
+
+    document.getElementById('modal-title').innerText = tool.name;
+    document.getElementById('modalIcon').innerHTML = `<i data-lucide="${tool.icon}"></i>`;
+
     injectToolUI(id);
 
     document.getElementById('modal-overlay').classList.remove('hidden');
@@ -59,7 +71,6 @@ function injectToolUI(id) {
 
     switch (id) {
 
-        // 🔥 QR GENERATOR (FIXED)
         case 'qr-code-generator':
             c.innerHTML = `
             <div class="space-y-5">
@@ -69,14 +80,12 @@ function injectToolUI(id) {
             </div>`;
             break;
 
-        // NOTES
         case 'notes-app':
             c.innerHTML = `
             <textarea id="notes" class="w-full h-60 p-4 border rounded-xl">${state.notes}</textarea>`;
             document.getElementById('notes').oninput = saveNotes;
             break;
 
-        // TODO
         case 'todo-list':
             c.innerHTML = `
             <div class="space-y-4">
@@ -87,14 +96,12 @@ function injectToolUI(id) {
             renderTodo();
             break;
 
-        // COLOR
         case 'color-picker':
             c.innerHTML = `
             <input type="color" id="color" onchange="pickColor()">
             <div id="color-val" class="mt-2 font-bold"></div>`;
             break;
 
-        // UNIT
         case 'unit-converter':
             c.innerHTML = `
             <input id="unit" class="p-3 border rounded">
@@ -105,8 +112,6 @@ function injectToolUI(id) {
         default:
             c.innerHTML = `<h2>Coming Soon</h2>`;
     }
-
-    lucide.createIcons();
 }
 
 // ================= LOGIC =================
@@ -143,7 +148,7 @@ function renderTodo() {
     const ul = document.getElementById('todo-list');
     if (!ul) return;
 
-    ul.innerHTML = state.todo.map(t => `<li class="bg-gray-100 p-2 rounded">${t}</li>`).join('');
+    ul.innerHTML = state.todo.map(t => `<li class="bg-gray-100 dark:bg-gray-800 p-2 rounded">${t}</li>`).join('');
 }
 
 // COLOR
@@ -165,8 +170,11 @@ document.getElementById('modal-close').onclick = closeModal;
 document.getElementById('modal-overlay').onclick = closeModal;
 
 document.getElementById('theme-toggle').onclick = () => {
+    state.theme = state.theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('theme', state.theme);
     document.documentElement.classList.toggle('dark');
 };
 
 // ================= BOOT =================
-render();
+initTheme();
+renderTools();
