@@ -1,79 +1,35 @@
-/* Custom CSS Extensions */
+/* Custom Styles Layer */
 :root {
-    --glass: rgba(255, 255, 255, 0.7);
-    --glass-dark: rgba(17, 24, 39, 0.7);
+    --glass: rgba(255, 255, 255, 0.75);
+    --glass-dark: rgba(17, 24, 39, 0.75);
 }
 
-body {
-    -webkit-font-smoothing: antialiased;
-    letter-spacing: -0.015em;
-}
+body { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
 
-/* Glassmorphism Implementation */
-.glass {
-    @apply bg-white/75 dark:bg-gray-900/75 backdrop-blur-2xl;
-}
+.glass { @apply bg-white/75 dark:bg-gray-900/75 backdrop-blur-2xl; }
 
-/* Custom Scrollbars */
-.custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-gray-200 dark:bg-gray-800 rounded-full border-4 border-transparent bg-clip-padding;
-}
+/* Scrollbars */
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { @apply bg-gray-200 dark:bg-gray-800 rounded-full; }
 
-/* Premium Card Interactions */
+/* Premium Cards */
 .tool-card {
     transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
-
 .tool-card:hover {
     @apply -translate-y-4 border-blue-600 shadow-2xl;
-    box-shadow: 0 45px 70px -25px rgba(37, 99, 235, 0.25);
+    box-shadow: 0 40px 60px -20px rgba(37, 99, 235, 0.25);
 }
 
-.dark .tool-card:hover {
-    box-shadow: 0 45px 70px -25px rgba(0, 0, 0, 0.7);
-}
-
-/* Quote Fade Animation */
-#quoteArea.fade-out {
-    opacity: 0;
-    transform: translateY(-10px);
-}
-
-/* Master Input Styling inside Tools */
-.tool-label {
-    @apply block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4;
-}
-
+/* Tool Styling */
 .tool-field {
-    @apply w-full p-5 rounded-3xl bg-gray-50/50 dark:bg-gray-900/40 border-2 border-gray-100 dark:border-gray-800 outline-none focus:border-blue-500 dark:focus:border-blue-400 transition-all font-bold text-lg text-gray-800 dark:text-gray-100;
+    @apply w-full p-5 rounded-3xl bg-gray-100/50 dark:bg-gray-900/40 border-2 border-transparent focus:border-blue-500 outline-none transition-all font-bold text-lg;
 }
+.tool-btn {
+    @apply w-full p-5 rounded-3xl bg-blue-600 hover:bg-blue-700 text-white font-black text-lg uppercase tracking-widest shadow-xl shadow-blue-500/30 active:scale-95 transition-all;
+}
+.tool-label { @apply block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 px-2; }
+.result-pane { @apply mt-8 p-10 bg-blue-50/50 dark:bg-blue-900/10 border-2 border-blue-100 dark:border-blue-900/30 rounded-[2.5rem] animate-in fade-in zoom-in duration-500; }
 
-.action-btn {
-    @apply w-full p-5 rounded-3xl bg-blue-600 hover:bg-blue-700 text-white font-black text-lg uppercase tracking-wider shadow-2xl shadow-blue-500/30 active:scale-[0.98] transition-all;
-}
-
-.result-pane {
-    @apply mt-10 p-10 bg-blue-50/50 dark:bg-blue-900/10 border-2 border-blue-100 dark:border-blue-900/20 rounded-[3rem] animate-in fade-in slide-in-from-bottom-5 duration-700;
-}
-
-/* Dropdown Animation */
-.group:hover .group-hover\:visible {
-    animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 640px) {
-    .tool-card { padding: 2rem !important; }
-    h1 { font-size: 2.75rem !important; }
-}
+@media (max-width: 640px) { .tool-card { padding: 1.5rem !important; } }
