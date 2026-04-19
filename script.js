@@ -241,7 +241,238 @@ function injectToolUI(id) {
         case 'password-generator':
             c.innerHTML = `<div class="space-y-10"><div class="modal-field"><label class="text-[10px] font-black text-gray-400 uppercase">Length: <span id="pg-v">16</span></label><input type="range" id="pg-l" min="8" max="64" value="16" oninput="document.getElementById('pg-v').innerText=this.value" class="w-full"></div><div id="pg-out" class="p-10 bg-gray-50 dark:bg-gray-900 rounded-[2.5rem] border-2 border-dashed font-mono text-2xl font-bold select-all text-center">...</div><button onclick="runPG()" class="w-full py-5 bg-blue-600 text-white rounded-3xl font-black uppercase text-xs shadow-xl">New Key</button></div>`; runPG(); break;
         default:
-            c.innerHTML = `<div class="p-20 text-center grayscale opacity-10"><i data-lucide="wrench" class="w-20 h-20 mx-auto mb-6"></i><p class="font-black text-xl uppercase tracking-widest">Utility Module Ready</p></div>`;
+     c.innerHTML = `<div class="p-20 text-center grayscale opacity-10"><i data-lucide="wrench" class="w-20 h-20 mx-auto mb-6"></i><p class="font-black text-xl uppercase tracking-widest">Utility Module Ready</p></div>`;
+    
+    
+    // ================= EXTRA TOOL UIs =================
+
+const originalInject = injectToolUI;
+
+injectToolUI = function(id){
+    const c = document.getElementById('tool-content');
+
+    switch(id){
+
+        case 'age-calculator':
+            c.innerHTML = `
+            <input type="date" id="age-date" class="input">
+            <button onclick="calcAge()" class="btn">Calculate</button>
+            <div id="age-result"></div>`;
+        break;
+
+        case 'qr-code-generator':
+            c.innerHTML = `
+            <input id="qr-text" class="input">
+            <button onclick="genQR()" class="btn">Generate</button>
+            <img id="qr-img" class="mx-auto mt-4"/>`;
+        break;
+
+        case 'base64-converter':
+            c.innerHTML = `
+            <textarea id="b64-in" class="input"></textarea>
+            <button onclick="toBase64()" class="btn">Encode</button>
+            <button onclick="fromBase64()" class="btn">Decode</button>
+            <textarea id="b64-out" class="input"></textarea>`;
+        break;
+
+        case 'url-converter':
+            c.innerHTML = `
+            <input id="url-in" class="input">
+            <button onclick="encodeURL()" class="btn">Encode</button>
+            <button onclick="decodeURL()" class="btn">Decode</button>
+            <input id="url-out" class="input">`;
+        break;
+
+        case 'color-picker':
+            c.innerHTML = `
+            <input type="color" id="color" onchange="pickColor()">
+            <div id="color-val"></div>`;
+        break;
+
+        case 'stopwatch':
+            c.innerHTML = `
+            <div id="sw">0</div>
+            <button onclick="startSW()" class="btn">Start</button>
+            <button onclick="stopSW()" class="btn">Stop</button>`;
+        break;
+
+        case 'todo-list':
+            c.innerHTML = `
+            <input id="todo-in" class="input">
+            <button onclick="addTodo()" class="btn">Add</button>
+            <ul id="todo-list"></ul>`;
+            renderTodo();
+        break;
+
+        case 'notes-app':
+            c.innerHTML = `
+            <textarea id="notes" class="input h-40" oninput="saveNotes()">${state.notes}</textarea>`;
+        break;
+
+        case 'text-to-speech':
+            c.innerHTML = `
+            <textarea id="tts" class="input"></textarea>
+            <button onclick="speak()" class="btn">Speak</button>`;
+        break;
+
+        case 'speech-to-text':
+            c.innerHTML = `
+            <button onclick="startSTT()" class="btn">Start Mic</button>
+            <div id="stt-out"></div>`;
+        break;
+
+        case 'unit-converter':
+            c.innerHTML = `
+            <input id="unit-in" class="input" placeholder="cm">
+            <button onclick="convertUnit()" class="btn">Convert</button>
+            <div id="unit-out"></div>`;
+        break;
+
+        case 'sip-calculator':
+            c.innerHTML = `
+            <input id="sip-m" class="input" placeholder="Monthly">
+            <input id="sip-r" class="input" placeholder="Rate">
+            <input id="sip-y" class="input" placeholder="Years">
+            <button onclick="calcSIP()" class="btn">Calculate</button>
+            <div id="sip-out"></div>`;
+        break;
+
+        case 'roi-calculator':
+            c.innerHTML = `
+            <input id="roi-i" class="input" placeholder="Invested">
+            <input id="roi-r" class="input" placeholder="Return">
+            <button onclick="calcROI()" class="btn">Calculate</button>
+            <div id="roi-out"></div>`;
+        break;
+
+        default:
+            originalInject(id);
+    }
+
+    lucide.createIcons();
+};
+
+
+// ================= LOGIC FUNCTIONS =================
+
+function calcAge(){
+    const d = new Date(document.getElementById('age-date').value);
+    const now = new Date();
+    const age = now.getFullYear() - d.getFullYear();
+    document.getElementById('age-result').innerText = age + " Years";
+}
+
+function genQR(){
+    const text = document.getElementById('qr-text').value;
+    document.getElementById('qr-img').src =
+    `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(text)}`;
+}
+
+function toBase64(){
+    document.getElementById('b64-out').value =
+    btoa(document.getElementById('b64-in').value);
+}
+
+function fromBase64(){
+    document.getElementById('b64-out').value =
+    atob(document.getElementById('b64-in').value);
+}
+
+function encodeURL(){
+    document.getElementById('url-out').value =
+    encodeURIComponent(document.getElementById('url-in').value);
+}
+
+function decodeURL(){
+    document.getElementById('url-out').value =
+    decodeURIComponent(document.getElementById('url-in').value);
+}
+
+function pickColor(){
+    document.getElementById('color-val').innerText =
+    document.getElementById('color').value;
+}
+
+// STOPWATCH
+let swInt, swTime=0;
+function startSW(){
+    swInt = setInterval(()=>{
+        swTime++;
+        document.getElementById('sw').innerText = swTime;
+    },1000);
+}
+function stopSW(){ clearInterval(swInt); }
+
+// TODO
+function addTodo(){
+    const val = document.getElementById('todo-in').value;
+    state.todo.push(val);
+    localStorage.setItem('tool_todo', JSON.stringify(state.todo));
+    renderTodo();
+}
+
+function renderTodo(){
+    const ul = document.getElementById('todo-list');
+    if(!ul) return;
+    ul.innerHTML = state.todo.map(t=>`<li>${t}</li>`).join('');
+}
+
+// NOTES
+function saveNotes(){
+    state.notes = document.getElementById('notes').value;
+    localStorage.setItem('tool_notes', state.notes);
+}
+
+// TTS
+function speak(){
+    const msg = new SpeechSynthesisUtterance(
+        document.getElementById('tts').value
+    );
+    speechSynthesis.speak(msg);
+}
+
+// STT
+function startSTT(){
+    const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    rec.onresult = e=>{
+        document.getElementById('stt-out').innerText = e.results[0][0].transcript;
+    };
+    rec.start();
+}
+
+// UNIT (basic)
+function convertUnit(){
+    const v = parseFloat(document.getElementById('unit-in').value);
+    document.getElementById('unit-out').innerText = (v/100)+" meters";
+}
+
+// SIP
+function calcSIP(){
+    const m = +document.getElementById('sip-m').value;
+    const r = +document.getElementById('sip-r').value/100/12;
+    const n = +document.getElementById('sip-y').value*12;
+
+    const future = m * ((Math.pow(1+r,n)-1)/r)*(1+r);
+    document.getElementById('sip-out').innerText = applyCurr(future);
+}
+
+// ROI
+function calcROI(){
+    const i = +document.getElementById('roi-i').value;
+    const r = +document.getElementById('roi-r').value;
+    const roi = ((r - i)/i)*100;
+    document.getElementById('roi-out').innerText = roi.toFixed(2)+"%";
+}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     }
 }
 
