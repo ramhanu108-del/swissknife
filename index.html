@@ -3,24 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Swiss Knife Tools</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
 
 <!-- NAV -->
-<div class="flex justify-between items-center p-4 bg-white dark:bg-gray-800 shadow">
+<div class="flex justify-between items-center p-4 shadow bg-white dark:bg-gray-800">
     <h1 class="text-2xl font-bold">Swiss Knife 🔧</h1>
-
-    <button id="themeToggle">🌙</button>
+    <button onclick="toggleTheme()">🌙</button>
 </div>
 
 <!-- SEARCH -->
@@ -30,13 +27,13 @@
 </div>
 
 <!-- GRID -->
-<div id="grid" class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4"></div>
+<div id="grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4"></div>
 
 <!-- MODAL -->
-<div id="modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-96">
-        <h2 id="modalTitle" class="text-xl font-bold mb-4"></h2>
-        <div id="modalBody"></div>
+<div id="modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-[400px]">
+        <h2 id="title" class="text-xl font-bold mb-4"></h2>
+        <div id="body"></div>
         <button onclick="closeModal()" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
     </div>
 </div>
