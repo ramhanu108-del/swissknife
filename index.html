@@ -1,43 +1,191 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Swiss Knife Tools</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Master Tags -->
+    <title>SmartTools Hub - 33+ Free Professional Online Tools</title>
+    <meta name="description" content="Access premium browser-based tools for Images, PDF, Finance, Instagram, and Productivity. 100% Secure, Fast, and Free.">
+    <meta name="keywords" content="free online tools, image compressor, emi calculator, instagram username generator, pdf merger, word counter">
+    <link rel="canonical" href="https://yourdomain.com/" />
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Open Graph -->
+    <meta property="og:title" content="SmartTools Hub - Swiss Knife for All Your Work">
+    <meta property="og:description" content="33+ essential tools in one single interface. No registration required.">
+    <meta property="og:type" content="website">
 
-<link rel="stylesheet" href="style.css">
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "SmartTools Hub",
+      "url": "https://yourdomain.com",
+      "description": "All-in-one suite of image, text, and financial tools.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any"
+    }
+    </script>
+
+    <!-- UI Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    backdropBlur: { xs: '2px' }
+                }
+            }
+        }
+    </script>
 </head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100 transition-colors duration-300 antialiased font-sans">
 
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
+    <!-- Top Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border-b border-gray-100 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 h-18 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer select-none" onclick="location.reload()">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+                    <i data-lucide="wrench"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-lg font-black tracking-tight leading-none italic">SmartTools <span class="text-blue-600">Hub</span></span>
+                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Swiss Knife Suite</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <button id="themeToggle" class="p-3 rounded-2xl bg-gray-100 dark:bg-gray-800 hover:bg-blue-500 hover:text-white transition-all shadow-sm">
+                    <i data-lucide="moon" id="moonIcon" class="w-5 h-5"></i>
+                    <i data-lucide="sun" id="sunIcon" class="w-5 h-5 hidden"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
 
-<!-- NAV -->
-<div class="flex justify-between items-center p-4 shadow bg-white dark:bg-gray-800">
-    <h1 class="text-2xl font-bold">Swiss Knife 🔧</h1>
-    <button onclick="toggleTheme()">🌙</button>
-</div>
+    <!-- Main Container -->
+    <main class="min-h-screen">
+        
+        <!-- Ad Placeholder (Top) -->
+        <div class="max-w-7xl mx-auto px-4 pt-6">
+            <div class="h-24 bg-gray-100 dark:bg-gray-900 border border-dashed border-gray-300 dark:border-gray-700 rounded-2xl flex items-center justify-center text-gray-400 text-sm font-bold uppercase tracking-widest">
+                Responsive Display Ad Space
+            </div>
+        </div>
 
-<!-- SEARCH -->
-<div class="p-4">
-    <input id="search" type="text" placeholder="Search tools..."
-    class="w-full p-3 rounded-xl border dark:bg-gray-800">
-</div>
+        <!-- Hero & Search -->
+        <header class="pt-16 pb-8 px-4 text-center">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tighter leading-tight bg-clip-text text-transparent bg-gradient-to-b from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
+                Swiss Knife for <br/>
+                <span class="text-blue-600 italic">All Your Work</span>
+            </h1>
+            
+            <div class="relative max-w-2xl mx-auto mb-10 group">
+                <div class="absolute inset-y-0 left-5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </div>
+                <input type="text" id="toolSearch" placeholder="Search 33+ tools... (e.g. compress, emi, bio)" 
+                       class="w-full pl-14 pr-6 py-5 rounded-3xl bg-white dark:bg-gray-900 border-2 border-gray-100 dark:border-gray-800 focus:border-blue-500 outline-none shadow-2xl shadow-gray-200/50 dark:shadow-none transition-all text-lg">
+            </div>
 
-<!-- GRID -->
-<div id="grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4"></div>
+            <!-- Categories -->
+            <div id="categoryTabs" class="flex flex-wrap items-center justify-center gap-3 no-scrollbar overflow-x-auto pb-4">
+                <!-- Data Driven Categories -->
+            </div>
+        </header>
 
-<!-- MODAL -->
-<div id="modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-[400px]">
-        <h2 id="title" class="text-xl font-bold mb-4"></h2>
-        <div id="body"></div>
-        <button onclick="closeModal()" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
+        <!-- Shelves (Recently, Popular, Trending) -->
+        <div id="shelves" class="max-w-7xl mx-auto px-4 pb-12 space-y-12">
+            <!-- Dynamic Tool Shelves -->
+        </div>
+
+        <!-- Main Tool Grid -->
+        <div id="toolGridContainer" class="max-w-7xl mx-auto px-4 pb-32">
+            <h2 id="gridTitle" class="text-2xl font-bold mb-8 flex items-center gap-3">
+                <i data-lucide="grid-3x3" class="text-blue-600"></i>
+                All Tools
+            </h2>
+            <div id="toolGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Full Tool List -->
+            </div>
+            
+            <div id="noResults" class="hidden text-center py-24 opacity-50">
+                <i data-lucide="search-x" class="w-16 h-16 mx-auto mb-4 text-gray-400"></i>
+                <p class="text-xl font-bold">No results matching your search.</p>
+            </div>
+        </div>
+
+        <!-- Ad Placeholder (Bottom) -->
+        <div class="max-w-4xl mx-auto px-4 pb-20">
+            <div class="h-64 bg-gray-100 dark:bg-gray-900 border border-dashed border-gray-300 dark:border-gray-700 rounded-3xl flex items-center justify-center text-gray-400 text-sm font-bold uppercase tracking-widest">
+                Fixed Rectangle Ad Space
+            </div>
+        </div>
+    </main>
+
+    <!-- Global Modal System -->
+    <div id="modalOverlay" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm hidden opacity-0 transition-all duration-300">
+        <div id="modalContent" class="bg-white dark:bg-gray-800 w-full max-w-4xl max-h-[90vh] rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col scale-95 transition-all duration-300">
+            
+            <!-- Modal Header -->
+            <div class="px-8 py-6 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between sticky top-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md">
+                <div class="flex items-center gap-4">
+                    <div id="modalIcon" class="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 text-blue-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform"></div>
+                    <div>
+                        <h2 id="modalTitle" class="text-2xl font-bold leading-none mb-1">Tool Title</h2>
+                        <span id="modalCat" class="text-[10px] uppercase font-bold text-gray-400 tracking-widest">Category</span>
+                    </div>
+                </div>
+                <button onclick="closeTool()" class="p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-2xl transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div id="modalScrollBody" class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                
+                <!-- Tool Active UI -->
+                <div id="toolUI" class="mb-16">
+                    <!-- Specific Tool Code Renders Here -->
+                </div>
+
+                <!-- Content Ad -->
+                <div class="my-12 h-32 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-400 text-xs font-bold uppercase tracking-widest italic">
+                    In-Tool Native Ad Space
+                </div>
+
+                <!-- Content & FAQs (SEO) -->
+                <div id="modalSEO" class="space-y-12 pb-10">
+                    <!-- Tool Specific Content -->
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
-<script src="script.js"></script>
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 pt-20 pb-10 px-4">
+        <div class="max-w-7xl mx-auto text-center space-y-6">
+            <div class="flex items-center justify-center gap-3">
+                <div class="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center text-white"><i data-lucide="wrench" class="w-4 h-4"></i></div>
+                <span class="text-xl font-bold italic tracking-tighter leading-none">SmartTools <span class="text-blue-600">Hub</span></span>
+            </div>
+            <p class="text-gray-500 text-sm max-w-md mx-auto">Providing professional utilities to simplify your daily digital workflow. All tools are free and secure forever.</p>
+            <div class="flex items-center justify-center gap-6 text-sm text-gray-400 font-bold uppercase tracking-widest">
+                <a href="#" class="hover:text-blue-600 transition-colors">Privacy</a>
+                <a href="#" class="hover:text-blue-600 transition-colors">Terms</a>
+                <a href="#" class="hover:text-blue-600 transition-colors">Sitemap</a>
+            </div>
+            <div class="text-[10px] text-gray-400 font-bold opacity-50 pt-10">© 2026 SmartTools Hub. Designed with precision for efficiency.</div>
+        </div>
+    </footer>
+
+    <!-- Global Scripts -->
+    <script src="script.js"></script>
 </body>
 </html>
