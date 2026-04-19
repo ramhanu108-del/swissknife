@@ -1,36 +1,75 @@
-body {
-    font-family: 'Inter', sans-serif;
+/* Custom Scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
 }
-
-/* cards */
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 16px;
-    cursor: pointer;
-    transition: 0.3s;
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
 }
-.dark .card {
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+    border: 2px solid transparent;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
     background: #1e293b;
 }
-.card:hover {
-    transform: translateY(-5px);
+
+/* Base Adjustments */
+body {
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* inputs */
-.input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
+input[type="range"] {
+    accent-color: #2563eb;
 }
 
-/* button */
-.btn {
-    width: 100%;
-    background: #2563eb;
-    color: white;
-    padding: 10px;
-    border-radius: 10px;
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Premium Card Effects */
+.tool-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tool-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 30px 40px -15px rgba(37, 99, 235, 0.15);
+    border-color: #2563eb;
+}
+
+.dark .tool-card:hover {
+    box-shadow: 0 30px 40px -15px rgba(0, 0, 0, 0.5);
+    border-color: #3b82f6;
+}
+
+/* Glassmorphism Classes */
+.glass {
+    @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-white/20 dark:border-white/5;
+}
+
+/* Tool Input Styling */
+.tool-input-label {
+    @apply block text-sm font-bold text-gray-400 uppercase tracking-widest mb-3;
+}
+
+.tool-field {
+    @apply w-full p-5 rounded-2xl bg-gray-50 dark:bg-gray-900/50 border-2 border-gray-100 dark:border-gray-800 outline-none focus:border-blue-500 dark:focus:border-blue-400 transition-all font-medium text-lg;
+}
+
+.tool-action-btn {
+    @apply w-full p-5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-lg uppercase tracking-wide shadow-xl active:scale-95 transition-all;
+}
+
+/* Result Area */
+.tool-result-box {
+    @apply mt-8 p-8 bg-blue-50/50 dark:bg-blue-900/10 border-2 border-blue-100 dark:border-blue-900/30 rounded-3xl animate-in fade-in zoom-in duration-300;
+}
+
+/* Responsive Grid Fixes */
+@media (max-width: 640px) {
+    .tool-card {
+        padding: 1.5rem !important;
+    }
 }
