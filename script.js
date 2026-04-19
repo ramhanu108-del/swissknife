@@ -150,12 +150,29 @@ function runPG() {
 
 // QR FIX
 function genQR() {
-    let text = document.getElementById('qr-text').value;
-    if (!text) return;
+    const text = document.getElementById('qr-text').value.trim();
+    const img = document.getElementById('qr-img');
 
-    document.getElementById('qr-img').src =
-        "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
-        encodeURIComponent(text);
+    if (!text) {
+        alert("Enter text first");
+        return;
+    }
+
+    // force reload (important fix)
+    img.src = "";
+
+    // better API (more stable)
+    img.src = "https://quickchart.io/qr?size=200&text=" + encodeURIComponent(text);
+
+    // ensure visible
+    img.style.display = "block";
+
+    // fallback अगर load fail हो
+    img.onerror = () => {
+        img.alt = "QR failed to load";
+        console.error("QR API failed");
+    };
+
 }
 
 // NOTES
