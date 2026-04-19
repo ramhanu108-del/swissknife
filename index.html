@@ -3,54 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartTools Hub - All Tools Included</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Swiss Knife - All Your Work Tools in One Place</title>
+    <meta name="description" content="Free online tools for images, PDF, finance, text, and Instagram. Fast, secure, and works entirely in your browser.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100 transition-colors duration-300">
 
+    <!-- Header / Nav -->
     <nav class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-100 dark:border-gray-800">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2 cursor-pointer" onclick="goHome()">
-                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white"><i data-lucide="wrench"></i></div>
-                <span class="text-xl font-extrabold">SmartTools <span class="text-blue-600">Hub</span></span>
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i data-lucide="wrench"></i>
+                </div>
+                <span class="text-xl font-extrabold tracking-tight">Swiss <span class="text-blue-600">Knife</span></span>
             </div>
-            <button id="themeToggle" class="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
-                <i data-lucide="moon" id="moonIcon"></i>
-                <i data-lucide="sun" id="sunIcon" class="hidden"></i>
+            
+            <button id="themeToggle" class="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
+                <i data-lucide="moon" id="moonIcon" class="w-5 h-5"></i>
+                <i data-lucide="sun" id="sunIcon" class="w-5 h-5 hidden"></i>
             </button>
         </div>
     </nav>
 
-    <main id="app">
-        <section id="hero" class="pt-20 pb-12 px-4 text-center">
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-4">Complete <span class="text-blue-600">Smart Utility</span> Suite</h1>
-            <p class="text-gray-500 mb-8">Access all 33+ browser-based tools for free, anywhere.</p>
+    <!-- Main Content -->
+    <main id="main">
+        <!-- Hero -->
+        <header id="hero" class="pt-20 pb-12 px-4 text-center">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight leading-tight">
+                All-in-One <br/>
+                <span class="text-blue-600">Productivity Suite</span>
+            </h1>
+            <p class="text-lg text-gray-500 max-w-2xl mx-auto mb-12">
+                Fast, secure, and 100% browser-based. Access 33+ tools without ever leaving your browser.
+            </p>
             
-            <div class="relative max-w-xl mx-auto mb-10">
-                <input type="text" id="toolSearch" placeholder="Search 33+ tools..." class="w-full pl-12 pr-6 py-4 rounded-xl bg-white dark:bg-gray-900 border-2 border-gray-100 dark:border-gray-800 outline-none focus:border-blue-500 shadow-lg">
-                <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i data-lucide="search"></i></div>
+            <!-- Search -->
+            <div class="relative max-w-2xl mx-auto mb-10 group">
+                <input type="text" id="toolSearch" placeholder="Search 33+ tools... (e.g. compress, emi, bio)" 
+                       class="w-full pl-14 pr-6 py-5 rounded-2xl bg-white dark:bg-gray-900 border-2 border-gray-100 dark:border-gray-800 focus:border-blue-500 outline-none shadow-xl transition-all text-lg">
+                <div class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
+                    <i data-lucide="search"></i>
+                </div>
             </div>
 
-            <div id="categoryTabs" class="flex flex-wrap justify-center gap-2"></div>
-        </section>
+            <!-- Category Tabs -->
+            <div id="categoryTabs" class="flex flex-wrap items-center justify-center gap-2"></div>
+        </header>
 
-        <section class="max-w-7xl mx-auto px-4 pb-20">
-            <div id="toolGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
-            <div id="emptySearch" class="hidden py-20 text-center text-gray-400">No tools found matching your search.</div>
-        </section>
-
-        <section id="toolView" class="hidden fixed inset-0 z-[60] bg-white dark:bg-gray-950 overflow-y-auto p-4 md:p-10">
-            <div class="max-w-4xl mx-auto">
-                <button onclick="goHome()" class="mb-8 flex items-center gap-2 text-blue-600 font-bold hover:translate-x-[-4px] transition-transform">
-                    <i data-lucide="arrow-left"></i> Back to Tools
-                </button>
-                <div id="toolInterface" class="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-2xl"></div>
+        <!-- Grid -->
+        <section class="max-w-7xl mx-auto px-4 pb-32">
+            <div id="toolGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Javascript renders tools here -->
+            </div>
+            <!-- Empty State -->
+            <div id="noResults" class="hidden text-center py-24">
+                <div class="w-20 h-20 bg-gray-100 dark:bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="search-x" class="text-gray-400"></i>
+                </div>
+                <h3 class="text-xl font-bold">No tools found</h3>
+                <p class="text-gray-500">Try a different search term or category.</p>
             </div>
         </section>
     </main>
+
+    <!-- Tool Modal Shell -->
+    <div id="toolModal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-800 w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col transform transition-all scale-95 opacity-0" id="modalContainer">
+            <!-- Modal Header -->
+            <div class="px-8 py-6 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between sticky top-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md">
+                <div class="flex items-center gap-3">
+                    <div id="modalIcon" class="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 text-blue-600 rounded-xl flex items-center justify-center"></div>
+                    <h2 id="modalTitle" class="text-2xl font-bold">Tool Name</h2>
+                </div>
+                <button onclick="closeTool()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <!-- Modal Content -->
+            <div id="modalBody" class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                <!-- Dynamic tool HTML goes here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 py-16 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="flex items-center justify-center gap-2 mb-4">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white"><i data-lucide="wrench" class="w-4 h-4"></i></div>
+                <span class="text-lg font-bold">Swiss Knife</span>
+            </div>
+            <p class="text-gray-500 text-sm">© 2026 Swiss Knife Tool Suite. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
