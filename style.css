@@ -1,126 +1,92 @@
-/* Custom Styles for SmartTools Hub */
+/* 
+ * Core Aesthetic Stylesheet
+ * Handcrafted for SmartTools Hub Premium Experience
+ */
 
 :root {
   --glass-bg: rgba(255, 255, 255, 0.72);
   --glass-bg-dark: rgba(17, 24, 39, 0.75);
 }
 
+/* Premium Layout Smoothing */
+*, ::after, ::before {
+  box-sizing: border-box;
+  transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+
+html { scroll-behavior: smooth; }
+body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html.dark { color-scheme: dark; }
+
+/* Perfect Glassmorphism */
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
+.dark .glass { background: var(--glass-bg-dark); }
 
-.dark .glass {
-  background: var(--glass-bg-dark);
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+/* Premium Scrollbars */
+.custom-scrollbar::-webkit-scrollbar { width: 10px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: #e5e7eb;
   border-radius: 9999px;
-  border: 4px solid transparent;
+  border: 3px solid transparent;
   background-clip: padding-box;
 }
+.dark .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #374151; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #d1d5db; }
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #4b5563; }
 
-.dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #1f2937;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #d1d5db;
-}
-
-.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #374151;
-}
-
-/* Base Overrides */
-*, ::after, ::before {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 200ms;
-}
-
-html.dark {
-  color-scheme: dark;
-}
-
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideInUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out;
-}
-
-.animate-slide-up {
-  animation: slideInUp 0.3s ease-out;
-}
-
-/* Range input styling */
+/* Interactive Overrides */
 input[type=range] {
   -webkit-appearance: none;
-  background-color: #e5e7eb;
-  height: 0.5rem;
+  background-color: #f3f4f6;
+  height: 8px;
   border-radius: 9999px;
+  cursor: pointer;
 }
-
-.dark input[type=range] {
-  background-color: #374151;
-}
-
+.dark input[type=range] { background-color: #1f2937; }
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 20px;
+  height: 20px;
   background-color: #2563eb;
   border-radius: 9999px;
   cursor: pointer;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.4);
+  border: 2px solid #fff;
 }
+.dark input[type=range]::-webkit-slider-thumb { border-color: #111827; }
 
-/* Tool Result Styling */
-.tool-result {
-  padding: 1.5rem;
-  background-color: #eff6ff;
-  border: 2px solid #dbeafe;
-  border-radius: 1.5rem;
-}
-
-.dark .tool-result {
-  background-color: rgba(30, 58, 138, 0.2);
-  border-color: rgba(30, 58, 138, 0.3);
-}
-
-/* Modal specific tweaks */
+/* Dynamic Modal Animations */
+#modal-container { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease; }
 #modal-container.scale-95 {
     pointer-events: none;
     opacity: 0;
-    transform: translate(-50%, -40%) scale(0.95);
+    transform: translate(-50%, -46%) scale(0.95);
 }
-
 #modal-container.scale-100 {
     pointer-events: auto;
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
 }
+
+/* Tool Result Styling */
+.tool-result {
+  @apply p-8 bg-blue-50 dark:bg-blue-900/10 border-2 border-blue-100 dark:border-blue-900/20 rounded-[2.5rem] mt-10 shadow-lg text-center;
+}
+
+/* Helpers */
+.h-18 { height: 4.5rem; }
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Custom Spacing Fix for Modals */
+.modal-field { display: flex; flex-direction: column; gap: 0.5rem; }
+input { outline: none; }
