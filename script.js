@@ -223,25 +223,163 @@ function injectToolUI(id) {
     const c = document.getElementById('tool-content');
     const sym = CURRENCIES[state.currency].symbol;
 
+    // 🔥 LIST OF FULLY WORKING TOOLS
+    const workingTools = [
+        'emi-calculator',
+        'word-counter',
+        'password-generator',
+        'age-calculator',
+        'qr-code-generator',
+        'base64-converter',
+        'url-converter',
+        'color-picker',
+        'stopwatch',
+        'todo-list',
+        'notes-app',
+        'text-to-speech',
+        'speech-to-text',
+        'unit-converter',
+        'sip-calculator',
+        'roi-calculator'
+    ];
+
+    // ❌ IF TOOL NOT IMPLEMENTED → SAFE UI
+    if (!workingTools.includes(id)) {
+        c.innerHTML = `
+        <div class="text-center py-20">
+            <div class="text-5xl mb-6">🚧</div>
+            <h2 class="text-xl font-bold mb-2">Tool Coming Soon</h2>
+            <p class="text-gray-500 text-sm mb-6">
+                This tool UI is ready but logic will be added soon.
+            </p>
+            <button onclick="closeModal()" 
+                class="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold">
+                Back
+            </button>
+        </div>`;
+        return;
+    }
+
+    // ✅ ONLY WORKING TOOLS BELOW
+
     switch(id) {
+
         case 'emi-calculator':
             c.innerHTML = `
-                <div class="space-y-8 animate-fade-in">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="modal-field"><label class="text-[10px] font-black text-gray-400 uppercase">Loan Amount (${sym})</label><input type="number" id="emi-p" class="p-5 bg-gray-50 dark:bg-gray-900 border rounded-2xl dark:border-gray-700 font-bold" placeholder="500000"></div>
-                        <div class="modal-field"><label class="text-[10px] font-black text-gray-400 uppercase">Rate (%)</label><input type="number" id="emi-r" class="p-5 bg-gray-50 dark:bg-gray-900 border rounded-2xl dark:border-gray-700 font-bold" placeholder="10.5"></div>
-                        <div class="modal-field"><label class="text-[10px] font-black text-gray-400 uppercase">Years</label><input type="number" id="emi-n" class="p-5 bg-gray-50 dark:bg-gray-900 border rounded-2xl dark:border-gray-700 font-bold" placeholder="5"></div>
-                    </div>
-                    <button onclick="runEMI()" class="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-3xl font-black text-xs uppercase tracking-widest shadow-xl transition-all">Calculate Installment</button>
-                    <div id="emi-res" class="hidden tool-result"><span class="text-[10px] font-black text-blue-600 block mb-3 uppercase">Monthly EMI</span><div class="text-5xl font-black" id="emi-out"></div></div>
-                </div>
-            `; break;
+            <div class="space-y-4">
+                <input id="emi-p" placeholder="Amount" class="input">
+                <input id="emi-r" placeholder="Rate %" class="input">
+                <input id="emi-n" placeholder="Years" class="input">
+                <button onclick="runEMI()" class="btn">Calculate</button>
+                <div id="emi-out"></div>
+            </div>`;
+        break;
+
         case 'word-counter':
-            c.innerHTML = `<div class="space-y-8"><textarea id="wc-in" oninput="runWC()" class="w-full h-80 p-8 bg-gray-50 dark:bg-gray-900 border rounded-[2.5rem] dark:border-gray-700 custom-scrollbar font-medium" placeholder="Paste content..."></textarea><div class="grid grid-cols-2 lg:grid-cols-4 gap-4"><div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-3xl border dark:border-gray-700 text-center"><div class="text-3xl font-black" id="wc-w">0</div><div class="text-[10px] font-bold text-gray-400 uppercase">Words</div></div><div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-3xl border dark:border-gray-700 text-center"><div class="text-3xl font-black" id="wc-c">0</div><div class="text-[10px] font-bold text-gray-400 uppercase">Chars</div></div></div></div>`; break;
+            c.innerHTML = `
+            <textarea id="wc-in" oninput="runWC()" class="input h-40"></textarea>
+            <div>Words: <span id="wc-w">0</span></div>
+            <div>Chars: <span id="wc-c">0</span></div>`;
+        break;
+
         case 'password-generator':
-            c.innerHTML = `<div class="space-y-10"><div class="modal-field"><label class="text-[10px] font-black text-gray-400 uppercase">Length: <span id="pg-v">16</span></label><input type="range" id="pg-l" min="8" max="64" value="16" oninput="document.getElementById('pg-v').innerText=this.value" class="w-full"></div><div id="pg-out" class="p-10 bg-gray-50 dark:bg-gray-900 rounded-[2.5rem] border-2 border-dashed font-mono text-2xl font-bold select-all text-center">...</div><button onclick="runPG()" class="w-full py-5 bg-blue-600 text-white rounded-3xl font-black uppercase text-xs shadow-xl">New Key</button></div>`; runPG(); break;
-        default:
-            c.innerHTML = `<div class="p-20 text-center grayscale opacity-10"><i data-lucide="wrench" class="w-20 h-20 mx-auto mb-6"></i><p class="font-black text-xl uppercase tracking-widest">Utility Module Ready</p></div>`;
+            c.innerHTML = `
+            <input type="range" id="pg-l" min="8" max="50" value="16">
+            <button onclick="runPG()" class="btn">Generate</button>
+            <div id="pg-out"></div>`;
+        break;
+
+        case 'age-calculator':
+            c.innerHTML = `
+            <input type="date" id="age-date" class="input">
+            <button onclick="calcAge()" class="btn">Calculate</button>
+            <div id="age-result"></div>`;
+        break;
+
+        case 'qr-code-generator':
+            c.innerHTML = `
+            <input id="qr-text" class="input">
+            <button onclick="genQR()" class="btn">Generate</button>
+            <img id="qr-img" class="mx-auto mt-4"/>`;
+        break;
+
+        case 'base64-converter':
+            c.innerHTML = `
+            <textarea id="b64-in" class="input"></textarea>
+            <button onclick="toBase64()" class="btn">Encode</button>
+            <button onclick="fromBase64()" class="btn">Decode</button>
+            <textarea id="b64-out" class="input"></textarea>`;
+        break;
+
+        case 'url-converter':
+            c.innerHTML = `
+            <input id="url-in" class="input">
+            <button onclick="encodeURL()" class="btn">Encode</button>
+            <button onclick="decodeURL()" class="btn">Decode</button>
+            <input id="url-out" class="input">`;
+        break;
+
+        case 'color-picker':
+            c.innerHTML = `
+            <input type="color" id="color" onchange="pickColor()">
+            <div id="color-val"></div>`;
+        break;
+
+        case 'stopwatch':
+            c.innerHTML = `
+            <div id="sw">0</div>
+            <button onclick="startSW()" class="btn">Start</button>
+            <button onclick="stopSW()" class="btn">Stop</button>`;
+        break;
+
+        case 'todo-list':
+            c.innerHTML = `
+            <input id="todo-in" class="input">
+            <button onclick="addTodo()" class="btn">Add</button>
+            <ul id="todo-list"></ul>`;
+            renderTodo();
+        break;
+
+        case 'notes-app':
+            c.innerHTML = `
+            <textarea id="notes" class="input h-40" oninput="saveNotes()">${state.notes}</textarea>`;
+        break;
+
+        case 'text-to-speech':
+            c.innerHTML = `
+            <textarea id="tts" class="input"></textarea>
+            <button onclick="speak()" class="btn">Speak</button>`;
+        break;
+
+        case 'speech-to-text':
+            c.innerHTML = `
+            <button onclick="startSTT()" class="btn">Start Mic</button>
+            <div id="stt-out"></div>`;
+        break;
+
+        case 'unit-converter':
+            c.innerHTML = `
+            <input id="unit-in" class="input" placeholder="cm">
+            <button onclick="convertUnit()" class="btn">Convert</button>
+            <div id="unit-out"></div>`;
+        break;
+
+        case 'sip-calculator':
+            c.innerHTML = `
+            <input id="sip-m" class="input" placeholder="Monthly">
+            <input id="sip-r" class="input" placeholder="Rate">
+            <input id="sip-y" class="input" placeholder="Years">
+            <button onclick="calcSIP()" class="btn">Calculate</button>
+            <div id="sip-out"></div>`;
+        break;
+
+        case 'roi-calculator':
+            c.innerHTML = `
+            <input id="roi-i" class="input" placeholder="Invested">
+            <input id="roi-r" class="input" placeholder="Return">
+            <button onclick="calcROI()" class="btn">Calculate</button>
+            <div id="roi-out"></div>`;
+        break;
     }
 }
 
